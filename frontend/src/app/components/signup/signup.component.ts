@@ -4,6 +4,7 @@ import { AuthService } from "../../services/auth.service";
 //para redireccionar
 import { Router } from "@angular/router";
 import swal from 'sweetalert';
+import { resetState } from 'sweetalert/typings/modules/state';
 
 @Component({
   selector: 'app-signup',
@@ -37,8 +38,13 @@ export class SignupComponent implements OnInit {
           if(res.estado=='correo'){
             swal("Error", "Debe usar un correo institucional de la UNAH", "warning");
           this.router.navigate(['/signup']);
+          }else if(res.estado=='correo_repetido'){
+            swal("Error", "Correo repetido", "warning");
+            //this.router.navigate(['/signup']);
+          }else if(res.estado=='email'){
+            swal("Error", "No se pudo enviar el correo", "warning");
+            //this.router.navigate(['/signup']);
           }else{
-            console.log(res);
             localStorage.setItem('item', res.token);
             swal("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu correo y a continuacion ingresa el codigo que recibiste", "success");
             this.router.navigate(['/verification']);

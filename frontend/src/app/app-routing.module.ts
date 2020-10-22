@@ -10,7 +10,7 @@ import { VerificationComponentsComponent} from './components/verification-compon
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/tasks',
+    redirectTo: '/signup',
     pathMatch: 'full'
   },
   {
