@@ -8,7 +8,11 @@ const userSchema = new Schema({
     numeroCuenta: String,
     codigo: String,
     estado: String,
-    direccion: String 
+    direccion: String,
+    token: String,
+    telefono: String,
+    identidad: String,
+    carrera: String
 }, {
     timestamps: true
 });

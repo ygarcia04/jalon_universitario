@@ -1,0 +1,97 @@
+<div class="container emp-profile">
+    <form (submit)="editarPerfil()" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-img">
+                    <img src="https://www.movilzona.es/app/uploads/2018/10/app-foto-movimiento.jpg" alt=""/>
+                    <div class="file btn btn-lg btn-primary">
+                        Change Photo
+                        <input type="file" name="file">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-head">
+                            <h5>
+                                Kshiti Ghelani
+                            </h5>
+                            <h6>
+                                Web Developer and Designer
+                            </h6>
+                </div>
+            </div>
+            
+        </div>
+        <div class="row">           
+            <div class="col-md-8">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Nombre</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{profile.nombres}} {{profile.apellidos}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{profile.email}}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Contraseña</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        ************ <br>
+                                        <a routerLink="/change-password">Cambiar Contraseña</a>
+                                    </div>
+                                    
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Telefono</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" [(ngModel)]="profile.telefono" name="telefono" value={{profile.telefono}}>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Carrera</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input [(ngModel)]="profile.carrera" name="carrera" type="text" value="{{profile.carrera}}">
+                                     
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Direccion</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" [(ngModel)]="profile.direccion" name="direccion" value="{{profile.direccion}}">
+                                       
+                                    </div>
+                                </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-2 ml-auto">
+            <button type="submit" class="profile-edit-btn">Guardar Cambios</button> 
+        </div>  
+    </form>           
+</div>
+

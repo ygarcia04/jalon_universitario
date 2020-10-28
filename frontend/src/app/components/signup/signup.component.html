@@ -1,32 +1,92 @@
 <div class="row">
     <div class="col-md-4 mx-auto">
         <div class="card">
-            <div class="card-header">
-                Registro
+            <div class="card-header division">
+                <b>Registro</b>
             </div>
             <div class="card-body">
-                <form (submit)="signUp()" >
+                <form (submit)="signUp()" autocomplete="off" >
                     <div class="form-group">
-                        <input type="text" [(ngModel)]="user.nombres" name="nombres" class="form-control" placeholder="Nombre" required autofocus>
+                        <input type="text" [(ngModel)]="user.nombres" name="nombres" class="form-control" pattern="[a-zA-Z| ]*" placeholder="Nombre" #nombres="ngModel" minlength="4" required>
+                    </div>
+                        <div *ngIf="nombres.invalid && (nombres.dirty || nombres.touched)" class="alert alert-danger">
+
+                            <div *ngIf="nombres.errors.required">
+                                Debe ingresar su nombre.
+                            </div>
+                            <div *ngIf="nombres.errors.minlength">
+                                El nombre debe tener al menos 4 caracteres.
+                            </div>
+                            <div *ngIf="nombres.errors.pattern">
+                                Solo incluya letras en el nombre.
+                            </div>
+                        </div>
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="user.apellidos" name="apellidos" class="form-control" pattern="[a-zA-Z| ]*" #apellidos="ngModel" minlength="4" placeholder="Apellidos" required>
+                    </div>
+                        <div *ngIf="apellidos.invalid && (nombres.dirty || apellidos.touched)" class="alert alert-danger">
+
+                            <div *ngIf="apellidos.errors.required">
+                                Debe ingresar su apellido.
+                            </div>
+                            <div *ngIf="apellidos.errors.minlength">
+                                El nombre debe tener al menos 4 caracteres.
+                            </div>
+                            <div *ngIf="apellidos.errors.pattern">
+                                Solo incluya letras en sus apellidos.
+                            </div>
+                        </div>
+
+                    <div class="form-group">
+                        <input type="email" [(ngModel)]="user.email" name="email" class="form-control"  minlength="13" #correo="ngModel" placeholder="Correo Institucional" required>
+                    </div>
+                        <div *ngIf="correo.invalid && (nombres.dirty || correo.touched)" class="alert alert-danger">
+                            <div *ngIf="correo.errors.required">
+                                Debe ingresar el correo electrónico.
+                            </div>
+                            <div *ngIf="correo.errors.minlength">
+                                El correo debe tener formato correcto.
+                            </div>
+                        </div>
+
+
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="user.numeroCuenta" name="numeroCuenta" maxlength="11" pattern="[0-9]*" #cuenta="ngModel" class="form-control" placeholder="Numero de Cuenta" required>
+                    </div>
+                        <div *ngIf="cuenta.invalid && (nombres.dirty || cuenta.touched)" class="alert alert-danger">
+
+                            <div *ngIf="cuenta.errors.required">
+                                Debe ingresar su número de cuenta.
+                            </div>
+                            <div *ngIf="cuenta.errors.maxlength">
+                                El número de cuenta no debe pasar los 11 dígitos.
+                            </div>
+                            <div *ngIf="cuenta.errors.pattern">
+                                El numero de cuenta solo puede incluir números.
+                            </div>
+                        </div>
+
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="user.carrera" name="carrera" class="form-control" placeholder="Carrera" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" [(ngModel)]="user.apellidos" name="apellidos" class="form-control" placeholder="Apellidos" required autofocus>
+                        <input type="text" [(ngModel)]="user.identidad" name="identidad" class="form-control" placeholder="Numero de Identidad" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" [(ngModel)]="user.numeroCuenta" name="numeroCuenta" class="form-control" placeholder="Numero de Cuenta" required autofocus>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" [(ngModel)]="user.email" name="email" class="form-control" placeholder="Email" required autofocus>
+                        <input type="text" [(ngModel)]="user.telefono" name="telefono" class="form-control" placeholder="Numero de Telefono" required>
                     </div>
                     <div class="form-group">
                         <input type="password" [(ngModel)]="user.password" class="form-control" name="password" placeholder="Contraseña" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" [(ngModel)]="user.direccion" name="direccion" class="form-control" placeholder="Barrio O Colonia" required autofocus>
+                        <input type="text" [(ngModel)]="user.direccion" name="direccion" class="form-control" placeholder="Barrio O Colonia" required>
                     </div>
                     <button type="submit" class="btn btn-block btn-primary">Registro</button>
                 </form>
             </div>
         </div>
     </div>
+
 </div>
+
+ 

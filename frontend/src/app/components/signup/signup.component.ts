@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms'
+import { FormBuilder } from '@angular/forms'
 //inicializando servicio para autenticar
+
 import { AuthService } from "../../services/auth.service";
 //para redireccionar
 import { Router } from "@angular/router";
@@ -19,7 +22,10 @@ export class SignupComponent implements OnInit {
     direccion:'',
     nombres:'',
     apellidos:'',
-    numeroCuenta:''
+    numeroCuenta:'',
+    telefono:'',
+    identidad:'',
+    carrera:''
 
   }
 
@@ -32,6 +38,9 @@ export class SignupComponent implements OnInit {
   }
   
   signUp(){
+    if(this.user.nombres.length<4){
+      swal("Descarado", "Llene todo", "warning");
+    }
     this.authService.signUp(this.user)
       .subscribe(
         res =>{
@@ -52,8 +61,6 @@ export class SignupComponent implements OnInit {
           
         },
         err =>{
-          //console.log(err);
-          //this.router.navigate(['/signin']);
           swal("Error", "Sus datos ya existen en la base!", "warning");
           this.router.navigate(['/signup']);
         }
