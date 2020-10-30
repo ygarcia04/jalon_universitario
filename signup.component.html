@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-md-4 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                Registro
+            </div>
+            <div class="card-body">
+                <form (submit)="signUp()" >
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="user.nombres" name="nombres" class="form-control" placeholder="Nombre" required autofocus>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="user.apellidos" name="apellidos" class="form-control" placeholder="Apellidos" required autofocus>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="user.numeroCuenta" name="numeroCuenta" class="form-control" placeholder="Numero de Cuenta" required autofocus>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" [(ngModel)]="user.email" name="email" class="form-control" placeholder="Email" required autofocus>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" [(ngModel)]="user.password" class="form-control" name="password" placeholder="Contraseña" required>                   
+                    </div>
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="user.direccion" name="direccion" class="form-control" placeholder="Barrio O Colonia" required autofocus>
+                    </div>
+                    <div class="form-group"   id="wrapper" style='margin-top: 20px'>
+                        <label for = "facultad">Facultad</label>
+                        <ejs-combobox id='comboelement' [dataSource]='data' [(ngModel)] = "user.facultad" name="facultad" class ="form-control" placeholder = 'Seleccione la facultad'></ejs-combobox>
+                    </div>
+                    <div class = "form-group" >
+                        <label for = "estado" class = "control-label">Facultad</label>
+                        <select type = "text" class = "form-control" id="facultad"
+                        formControlName = "facultad">
+                        <option>Facultad</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-block btn-primary">Registro</button>
+                </form>
+            </div>
+        </div>
+    </div>
+ 
+
+</div>
+
