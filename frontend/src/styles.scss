@@ -1,0 +1,15 @@
+@import '~@sweetalert2/theme-material-ui/material-ui.scss';
+@import '../node_modules/@syncfusion/ej2-base/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-buttons/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-dropdowns/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-inputs/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-popups/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-lists/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-angular-dropdowns/styles/material.css';
+/* You can add global styles to this file, and also import other style files */
+body{
+    background-image:url('app/img/fondo.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+/* You can add global styles to this file, and also import other style files */

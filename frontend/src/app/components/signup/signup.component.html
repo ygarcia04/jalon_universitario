@@ -1,26 +1,25 @@
 <div class="row">
     <div class="col-md-4 mx-auto">
         <div class="card">
-            <div class="card-header division">
-                <b>Registro</b>
+            <div class="card-header" style="text-align: center;">
+                Registro
             </div>
             <div class="card-body">
-                <form (submit)="signUp()" autocomplete="off" >
+                <form (submit)="signUp()" >
                     <div class="form-group">
-                        <input type="text" [(ngModel)]="user.nombres" name="nombres" class="form-control" pattern="[a-zA-Z| ]*" placeholder="Nombre" #nombres="ngModel" minlength="4" required>
+                        <input type="text" [(ngModel)]="user.nombres" name="nombres" class="form-control" pattern="[a-zA-Z| ]*" placeholder="Nombre" #nombres="ngModel" minlength="4" required autofocus>
                     </div>
-                        <div *ngIf="nombres.invalid && (nombres.dirty || nombres.touched)" class="alert alert-danger">
-
-                            <div *ngIf="nombres.errors.required">
-                                Debe ingresar su nombre.
-                            </div>
-                            <div *ngIf="nombres.errors.minlength">
-                                El nombre debe tener al menos 4 caracteres.
-                            </div>
-                            <div *ngIf="nombres.errors.pattern">
-                                Solo incluya letras en el nombre.
-                            </div>
+                    <div *ngIf="nombres.invalid && (nombres.dirty || nombres.touched)" class="alert alert-danger">
+                        <div *ngIf="nombres.errors.required">
+                            Debe ingresar su nombre.
                         </div>
+                        <div *ngIf="nombres.errors.minlength">
+                            El nombre debe tener al menos 4 caracteres.
+                        </div>
+                        <div *ngIf="nombres.errors.pattern">
+                            Solo incluya letras en el nombre.
+                        </div>
+                    </div>
                     <div class="form-group">
                         <input type="text" [(ngModel)]="user.apellidos" name="apellidos" class="form-control" pattern="[a-zA-Z| ]*" #apellidos="ngModel" minlength="4" placeholder="Apellidos" required>
                     </div>
@@ -36,7 +35,6 @@
                                 Solo incluya letras en sus apellidos.
                             </div>
                         </div>
-
                     <div class="form-group">
                         <input type="email" [(ngModel)]="user.email" name="email" class="form-control"  minlength="13" #correo="ngModel" placeholder="Correo Institucional" required>
                     </div>
@@ -48,8 +46,6 @@
                                 El correo debe tener formato correcto.
                             </div>
                         </div>
-
-
                     <div class="form-group">
                         <input type="text" [(ngModel)]="user.numeroCuenta" name="numeroCuenta" maxlength="11" pattern="[0-9]*" #cuenta="ngModel" class="form-control" placeholder="Numero de Cuenta" required>
                     </div>
@@ -65,28 +61,55 @@
                                 El numero de cuenta solo puede incluir números.
                             </div>
                         </div>
-
                     <div class="form-group">
-                        <input type="text" [(ngModel)]="user.carrera" name="carrera" class="form-control" placeholder="Carrera" required>
+                        <show-hide-password  btnStyle="primary"  [btnOutline]="true">
+                            <input type="password" [(ngModel)]="user.password"  name="password" placeholder="Contraseña" required>
+                        </show-hide-password>
+                    </div>
+                    <div class="form-group"> 
+                        <show-hide-password  btnStyle="primary"  [btnOutline]="true">    
+                            <input type="password" class="form-control" name="vpassword" [(ngModel)]="user.vpassword" placeholder="Verificar Contraseña" required> 
+                        </show-hide-password>                       
                     </div>
                     <div class="form-group">
-                        <input type="text" [(ngModel)]="user.identidad" name="identidad" class="form-control" placeholder="Numero de Identidad" required>
+                        <input type="text" [(ngModel)]="user.telefono" name="telefono" class="form-control" #telefono= "ngModel" maxlength="8" pattern="[0-9]*" placeholder="Número de Teléfono" required autofocus>
+                    </div>
+                    <div *ngIf="telefono.invalid && (nombres.dirty || telefono.touched)" class="alert alert-danger">
+                        <div *ngIf="telefono.errors.required">
+                            Debe ingresar su número de telefono.
+                        </div>
+                        <div *ngIf="telefono.errors.maxlength">
+                            El número de cuenta no debe pasar los 8 dígitos.
+                        </div>
+                        <div *ngIf="telefono.errors.pattern">
+                            El numero de teléfono solo puede incluir números.
+                        </div>
+                    </div>
+                    <div class="form-group" style='margin-top: 20px'>
+                        <label for = "facultad">Facultad</label>
+                        <ejs-combobox id='comboelement' [dataSource]='data' [(ngModel)] = "user.facultad" name="facultad" class ="form-control" placeholder = 'Seleccione la facultad'></ejs-combobox>
                     </div>
                     <div class="form-group">
-                        <input type="text" [(ngModel)]="user.telefono" name="telefono" class="form-control" placeholder="Numero de Telefono" required>
+                        <label>Fecha de Nacimiento</label>
+                        <input type="date" [(ngModel)]="user.fechaNacimiento" name="fechaNacimiento" class="form-control" required autofocus>
                     </div>
                     <div class="form-group">
-                        <input type="password" [(ngModel)]="user.password" class="form-control" name="password" placeholder="Contraseña" required>
+                        <input type="text" [(ngModel)]="user.direccion" name="direccion" class="form-control" placeholder="Barrio O Colonia" required autofocus>
                     </div>
                     <div class="form-group">
-                        <input type="text" [(ngModel)]="user.direccion" name="direccion" class="form-control" placeholder="Barrio O Colonia" required>
+                        Género:<br>
+                        <label>
+                          Femenino  <input type="radio" value="F" [(ngModel)]="user.sexo" name = 'sexo' />
+                        </label>
+                        &nbsp;
+                        <label>
+                          Masculino <input type="radio" value="M" [(ngModel)]="user.sexo" name = 'sexo'/>
+                        </label>
                     </div>
+                    
                     <button type="submit" class="btn btn-block btn-primary">Registro</button>
                 </form>
             </div>
         </div>
     </div>
-
 </div>
-
- 

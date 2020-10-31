@@ -9,12 +9,13 @@ app.use(express.json());
 app.use(cors());
 //Esto haria que todas nuestras paginas lleven api antes de la ruta
 //app.use('/api', require('./routes/index')); 
-app.use(require('./routes/index'));
+app.use(require('./routes/user'));
 app.use(require('./routes/login'));
-app.use(require('./routes/edit-profile'));
+app.use(require('./routes/editProfile'));
 app.use(require('./routes/change-password'));
-//app.all(require('./routes/profile'));
-
+app.use(require('./routes/rec-password'));
+app.use(require('./routes/change-recover-password'));
+app.use(require('./routes/delete-user'));
 
 
 app.listen(3000);

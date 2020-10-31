@@ -3,13 +3,14 @@ import {  AuthService} from "../../services/auth.service";
 import { HttpErrorResponse } from '@angular/common/http';
 //para redireccionar
 import { Router } from "@angular/router";
-import swal from 'sweetalert';
-import { resetState } from 'sweetalert/typings/modules/state';
+import Sawl from "sweetalert2/dist/sweetalert2.js";
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.scss'],
+  providers: [DatePipe]
 })
 export class ProfileComponent implements OnInit {
   profile={
@@ -20,27 +21,96 @@ export class ProfileComponent implements OnInit {
     telefono:'',
     carrera:'',
     numeroCuenta:'',
-    email:''
+    email:'',
+    fechaNacimiento:'',
+    facultad:'',
+    edad:''
   }
 
-  constructor(private authService: AuthService,
+  constructor(private authService: AuthService, private miDatePipe: DatePipe,
     private router: Router) { }
 
+
+
+    
+/*<!--?xml version="1.0" encoding="utf-8"?><!-- the root web configuration file -->
+<configuration>
+	
+
+<system.webServer>
+  <rewrite>
+    <rules>
+      <rule name="Angular Routes" stopProcessing="true">
+        <match url=".*" />
+        <conditions logicalGrouping="MatchAll">
+          <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+          <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+        </conditions>
+        <action type="Rewrite" url="/" />
+      </rule>
+    </rules>
+  </rewrite>
+</system.webServer>
+
+</configuration-->
+*/
+
+
+
   ngOnInit() {
-    this.authService.getProfile()
-      .subscribe(
-        res => {//console.log(res.User.nombres);
-          this.profile=res.User;
-          console.log(this.profile)
-        },
-        err => {
-          if (err instanceof HttpErrorResponse) {
-            if (err.status === 401) {
-              this.router.navigate(['/signin']);
+    this.authService.userState()
+    .subscribe(
+      res => {
+        if(res.estado=='inactivo'){
+          this.router.navigate(['/verification']);
+          Sawl("Error", "Debe verificar su usuario para usar Jalón Universitario", "warning");
+        }else{
+          this.authService.getProfile()
+          .subscribe(
+            res => {//console.log(res.User.nombres);
+              this.profile=res.User;
+              let currDate = new Date();
+              this.profile.edad= this.getEdad(this.profile.fechaNacimiento);  
+              console.log(this.profile.edad)      
+             this.profile.fechaNacimiento= this.fomatearFecha(this.profile.fechaNacimiento);        
+            },
+            err => {
+              if (err instanceof HttpErrorResponse) {
+                if (err.status === 401) {
+                  this.router.navigate(['/signin']);
+                }
+              }
             }
+          )
+          
+        }       
+      },
+      err => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 401) {
+            this.router.navigate(['/signin']);
           }
         }
-      )
+      }
+    )
+   
+  }
+
+  getEdad(fecha){
+    let currDate = new Date();
+    var opciones={ year: 'numeric'};
+    var anio = currDate.toLocaleString( 'es-MX', opciones);
+    var nac = new Date(fecha);
+    var anio_nac =nac.toLocaleString( 'es-MX' , opciones);
+    var edad=Number.parseInt(anio, 10)-Number.parseInt(anio_nac, 10);
+    return edad.toString();
+  }
+
+  fomatearFecha(fecha){
+    var date = new Date(fecha);
+    var opciones={ weekday:'long', year: 'numeric', month:'long', day:'numeric'};
+    return date.toLocaleString('es-MX', opciones);
+
   }
 
   editar(){
@@ -48,3 +118,4 @@ export class ProfileComponent implements OnInit {
   }
 
 }
+

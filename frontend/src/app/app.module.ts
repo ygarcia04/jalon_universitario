@@ -1,47 +1,61 @@
+//Import de dependencias
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import { ReactiveFormsModule } from "@angular/forms"; 
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // If You need animations
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule, HTTP_INTERCEPTORS, HttpClient} from '@angular/common/http';
 import { Observable } from "rxjs";
-import { AuthService } from "./services/auth.service";
 import { ShowHidePasswordModule } from 'ngx-show-hide-password';
+import { ComboBoxModule } from '@syncfusion/ej2-angular-dropdowns';
 
+//Imports de componentes y servicios
+import { AuthGuard } from "./guards/auth.guard";
+import { TokenInterceptorService } from "./services/token-interceptor.service";
+import { AuthService } from "./services/auth.service";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SignupComponent } from './components/signup/signup.component';
-import { SigninComponent } from './components/signin/signin.component';
-import { TasksComponent } from './components/tasks/tasks.component';
-import { PrivateTasksComponent } from './components/private-tasks/private-tasks.component';
-import { VerificationComponentsComponent } from './components/verification-components/verification-components.component';
-import { AuthGuard } from "./auth.guard";
-import { TokenInterceptorService } from "./services/token-interceptor.service";
-import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
-import { AppPasswordDirective } from './components/change-password/app-password.directive'
-
+import { ChangeRecPassComponent } from './components/change-rec-pass/change-rec-pass.component';
+import { DeleteAccountComponent } from './components/delete-account/delete-account.component';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { InicioComponent } from './components/inicio/inicio.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { RecPasswordComponent } from './components/rec-password/rec-password.component';
+import { SigninComponent } from './components/signin/signin.component';
+import { SignupComponent } from './components/signup/signup.component';
+import { TipousuarioComponent } from './components/tipousuario/tipousuario.component';
+import { VerificationComponent } from './components/verification/verification.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SignupComponent,
-    SigninComponent,
-    TasksComponent,
-    PrivateTasksComponent,
-    VerificationComponentsComponent,
-    EditProfileComponent,
     ChangePasswordComponent,
-    AppPasswordDirective,
- 
- 
+    ChangeRecPassComponent,
+    DeleteAccountComponent,
+    EditProfileComponent,
+    InicioComponent,
+    ProfileComponent,
+    RecPasswordComponent,
+    SigninComponent,
+    SignupComponent,
+    TipousuarioComponent,
+    VerificationComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule,
+    BrowserModule,
+    MDBBootstrapModule.forRoot(),
+    BrowserAnimationsModule,
     HttpClientModule,
+    ShowHidePasswordModule,
     ReactiveFormsModule,
-    ShowHidePasswordModule
+    ComboBoxModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     AuthService, 
@@ -51,7 +65,9 @@ import { AppPasswordDirective } from './components/change-password/app-password.
       useClass: TokenInterceptorService,
       multi: true
     }
+    
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule { }

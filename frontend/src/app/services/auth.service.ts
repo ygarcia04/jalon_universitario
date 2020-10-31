@@ -9,49 +9,63 @@ import { Observable } from "rxjs";
 export class AuthService {
 
   private URL = 'http://localhost:3000'
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router
+    ) {}
 
   signUp(user){
     return this.http.post<any>(this.URL + '/signup', user);  
   }
-
   verification(user){
     return this.http.post<any>(this.URL + '/verification', user);  
   }
 
-  getProfile() {
-    return this.http.get<any>(this.URL + '/profile');
-  }
 
-  signIn(user){
-    return this.http.post<any>(this.URL + '/signin', user);
+getProfile() {
+  return this.http.get<any>(this.URL + '/profile');
+}
 
-  }
+signIn(user){
+  return this.http.post<any>(this.URL + '/signin', user);
 
-  editProfile(user){
-    return this.http.post<any>(this.URL + '/edit-profile', user);
+}
 
-  }
+editProfile(user){
+  return this.http.post<any>(this.URL + '/edit-profile', user);
 
-  changePassword(user){
+}
+loggedIn() {
+  return !!localStorage.getItem('token');
+}
 
-    return this.http.post<any>(this.URL + '/change-password', user);
+logout() {
+  localStorage.removeItem('token');
+  this.router.navigate(['/signin']);
+}
 
-  }
-  loggedIn() {
-    return !!localStorage.getItem('item');
-  }
+getToken() {
+  return localStorage.getItem('token');
+}
+changePassword(user){
 
-  logout() {
-    localStorage.removeItem('item');
-    this.router.navigate(['/signin']);
-  }
+  return this.http.post<any>(this.URL + '/change-password', user);
 
-  getToken() {
-    return localStorage.getItem('item');
-  }
+}
+recPass(user){
+  return this.http.post<any>(this.URL + '/rec-password', user);
+}
+changeRecPass(user){
+  return this.http.post<any>(this.URL + '/recover-password', user);
+}
 
+deleteUser(user){
+  return this.http.post<any>(this.URL + '/delete-account', user);
+  
+}
+userState(){
+  return this.http.get<any>(this.URL + '/user-state');
 }
   
 
-
+}

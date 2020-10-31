@@ -1,0 +1,27 @@
+
+  <div class="row" style="padding:10%;">
+    <div class="col-md-4 mx-auto pad2y">
+        <div class="card">
+            <div class="card-header" style="text-align: center;">
+                <b>Eliminar Cuenta</b>
+            </div>
+            <div class="card-body">
+                <form (submit)="deleteUser()" >
+                
+                    <show-hide-password  btnStyle="primary" [btnOutline]="true">
+                        <input type="password" [(ngModel)]="user.contrasenaNueva1" name="contrasenaNueva1" placeholder="Escriba su contraseña actual" >
+                    </show-hide-password>
+                   <br>
+                    <show-hide-password btnStyle="primary" [btnOutline]="true">
+                        <input type="password" [(ngModel)]="user.contrasenaNueva2" name="contrasenaNueva2" placeholder="Confirme su contraseña actual">
+                    </show-hide-password>
+                    <br>
+                    <button type="submit" class="btn btn-block btn-primary">Eliminar Cuenta</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

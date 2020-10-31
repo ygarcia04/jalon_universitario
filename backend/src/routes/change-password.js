@@ -2,22 +2,33 @@
 const {Router}=require('express');
 const router = Router();
 
-const user = require('../models/users');
+const user = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
+const bcrypt = require ('bcrypt-nodejs');
 
 router.post('/change-password', verifyToken, async (req, res) => {
         const { contrasenaActual, contrasenaNueva1, contrasenaNueva2 } = req.body;
         if(contrasenaNueva1!=contrasenaNueva2){
             return res.json({estado:'password'});
         }
+        
         let token = req.headers.authorization.split(' ')[1];
         const User = await user.findOne({token});
         if (!User) {return res.status(401).send('Error');}
-        if (User.password !== contrasenaActual) return res.json({estado:'actual'});
+        
+        if(!bcrypt.compareSync(contrasenaActual, User.password) ){
+               return res.json({estado:'actual'});
+            }
+            const salt = bcrypt.genSaltSync();
+            const hash= bcrypt.hashSync(contrasenaNueva1, salt);
 
-            await user.updateOne({token},{$set:{password:contrasenaNueva1}})  
-        return res.status.json({estado:'hecho'});
+            if(await user.updateOne({token},{$set:{password:hash}})){
+                return res.status(200).json({estado:'hecho'});
+            } 
+             res.status(200).json({estado:'estado'});
 });
+
+
 
 async function verifyToken(req, res, next) {
 	try {

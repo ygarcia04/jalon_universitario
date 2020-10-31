@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from 'src/app/services/auth.service';
+
 import { Router } from "@angular/router";
-import swal from 'sweetalert';
-import { resetState } from 'sweetalert/typings/modules/state';
+import Swal from "sweetalert2/dist/sweetalert2.js";
+
 
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.css']
+  styleUrls: ['./signin.component.scss']
 })
 export class SigninComponent implements OnInit {
 
@@ -29,25 +31,31 @@ export class SigninComponent implements OnInit {
     .subscribe(
       res =>{ 
         if(res.estado=='email'){
-          swal("Error", "Su correo no esta registrado", "warning");
-          this.router.navigate(['/signup']);
+          Swal.fire("Error", "Su correo no esta registrado", "warning");
+          
         }else if(res.estado=='password'){
-          swal("Error", "Correo o contraseña incorrectos", "warning");
+          Swal.fire("Error", "Correo o contraseña incorrectos", "warning");
         }else if(res.estado=='inactivo'){
-          localStorage.setItem('item', res.token);
-          swal("Error", "Su usuario esta inactivo, debe activarlo para ingresar", "warning");
+          localStorage.setItem('token', res.token);
+          Swal.fire("Inactivo", "Su usuario esta inactivo, debe activarlo para ingresar", "warning");
           this.router.navigate(['/verification']);
 
+        }else if(res.estado=='temporal'){
+          localStorage.setItem('token', res.token);
+          Swal.fire("Bienvenido", "Ahora puede cambiar su contraseña", "success");
+          this.router.navigate(['/recover-pass']);
+
         }else{
-        localStorage.setItem('item', res.token);
-        swal("Bienvenido","", "success");
+        console.log(res.token);
+        localStorage.setItem('token', res.token);
+        Swal.fire("Bienvenido","", "success");
         this.router.navigate(['/profile']);
         }        
       },
       err =>{
         //this.router.navigate(['/signin']);
-        swal("Error", "Hubo un error en el sistema intente de nuevo", "warning");
-        this.router.navigate(['/signin']);
+        Swal.fire("Error", "Hubo un error en el sistema intente de nuevo", "warning");
+        
       }
     )
 

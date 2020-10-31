@@ -1,28 +1,7 @@
-<div class="container emp-profile">
-    <form (submit)="editarPerfil()" enctype="multipart/form-data">
+<!--div class="container emp-profile">
+    <form (submit)="editarPerfil()">
         <div class="row">
-            <div class="col-md-4">
-                <div class="profile-img">
-                    <img src="https://www.movilzona.es/app/uploads/2018/10/app-foto-movimiento.jpg" alt=""/>
-                    <div class="file btn btn-lg btn-primary">
-                        Change Photo
-                        <input type="file" name="file">
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="profile-head">
-                            <h5>
-                                Kshiti Ghelani
-                            </h5>
-                            <h6>
-                                Web Developer and Designer
-                            </h6>
-                </div>
-            </div>
-            
-        </div>
-        <div class="row">           
+                        
             <div class="col-md-8">
                 <div class="tab-content profile-tab" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -93,5 +72,111 @@
             <button type="submit" class="profile-edit-btn">Guardar Cambios</button> 
         </div>  
     </form>           
-</div>
+</div-->
 
+
+<div class="container emp-profile">
+    <form >   
+            
+                <div style="text-align: center;">
+                    <div class="profile-img">
+                        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt=""/>
+                        <!--div class="file btn btn-lg btn-primary">
+                            Cambiar foto
+                            <input type="file" name="file"/>
+                        </div-->
+                    </div>
+                </div>
+           
+            <div class="row">
+                
+                <div class="col-md-8">
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Nombre:</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{profile.nombres}} {{profile.apellidos}}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Email:</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{profile.email}}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Numero de cuenta:</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{profile.numeroCuenta}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Direccion:</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input [(ngModel)]="profile.direccion" size="36" name="direccion" type="text" value="{{profile.direccion}}">      
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Numero de telefono:</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input [(ngModel)]="profile.telefono" size="36" name="telefono" type="text" value="{{profile.telefono}}">      
+                                        </div>
+                                       
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Carrera</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <!--input [(ngModel)]="profile.facultad" name="facultad" type="text" value="{{profile.facultad}}"-->
+                                            <ejs-combobox id='comboelement' [dataSource]='data' [(ngModel)] = "profile.facultad" name="facultad" class ="form-control" value="{{profile.facultad}}"></ejs-combobox>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>Contraseña</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            ************ <br>
+                                            <a routerLink="/change-password">Cambiar Contraseña</a>
+                                        </div>
+                                        
+                                    </div>
+                                   
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+        <br>
+        <div style="text-align: center;">
+            
+            <button (click)="editarPerfil()" type="submit" class="btn btn-secondary">Guardar Cambios</button> 
+        </div>  
+                
+    </form> 
+    <br>
+    <div style="text-align: center;">
+        <input type="button" (click)="deleteAccount()"  class="btn btn-danger"  value="Eliminar la Cuenta">
+    </div>  
+         
+</div>
