@@ -76,7 +76,7 @@
 
 
 <div class="container emp-profile">
-    <form >   
+    <form (ngSubmit)="editarPerfil()"  >   
             
                 <div style="text-align: center;">
                     <div class="profile-img">
@@ -170,13 +170,13 @@
         <br>
         <div style="text-align: center;">
             
-            <button (click)="editarPerfil()" type="submit" class="btn btn-secondary">Guardar Cambios</button> 
+            <input type="submit" mdbBtn color="info" value="Guardar Cambios"> 
         </div>  
                 
     </form> 
     <br>
     <div style="text-align: center;">
-        <input type="button" (click)="deleteAccount()"  class="btn btn-danger"  value="Eliminar la Cuenta">
+        <input type="button" (click)="deleteAccount()"  class="btn btn-danger" value="Eliminar La Cuenta">
     </div>  
          
 </div>

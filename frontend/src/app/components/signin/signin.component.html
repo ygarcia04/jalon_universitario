@@ -1,28 +1,27 @@
-<div class="row" style="padding:10%;">
-    <div class="col-md-4 mx-auto pad2y">
-        <div class="card">
-            <div class="card-header">
-                Inicio de Sesion
-            </div>
-            <div class="card-body">
-                <form (submit)="signIn()" >
-                    <div class="form-group">
-                        <input type="email" [(ngModel)]="user.email" name="email" class="form-control" placeholder="Email" required autofocus>
-                    </div>
-                    <div class="form-group">
-                        <show-hide-password  btnStyle="secondary"  [btnOutline]="true"> 
-                            <input type="password" [(ngModel)]="user.password" class="form-control" name="password" placeholder="Contraseña" required>
-                        </show-hide-password>
-                        
-                    </div>
-                    <div style="text-align: center;">
-                        <a routerLink="/rec-password" >Olvidaste tu contraseña</a>
-                    </div>
-                    <br>
-                    <button type="submit" class="btn btn-block btn-primary">Iniciar Sesion</button>
-                </form>
-            </div>
-        </div>
+
+<div class="row" style="padding-top: 5%;">
+    <div class="col-sm-4 mx-auto" style="background-color: white;">
+        <form class="text-center border border-light p-5" (submit)="signIn()" [formGroup]="signin">
+            <p class="h4 mb-3">Iniciar Sesión</p>
+            <input type="email" id="defaultLoginFormEmail" class="form-control mb-4" name="email" formControlName="email" placeholder="Correo" autofocus>
+                <div class="input-group mb-4">
+                    <input type="password" mdbActive  id="defaultLoginFormPassword" name="password" [type]="hide ? 'password' : 'text'" formControlName="password" class="form-control" placeholder="Contraseña" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon2"> <mdb-icon fas icon="eye-slash" *ngIf="hide==true else eyeOpen" (click)="hide = !hide"></mdb-icon></span>
+                                <ng-template #eyeOpen >
+                                    <mdb-icon fas icon="eye" (click)="hide = !hide"></mdb-icon>
+                                </ng-template>
+                        </div>
+                </div>
+                <div class="d-flex justify-content-around">
+                    <a routerLink="/rec-password">Olvidaste tu contraseña?</a>
+                </div>
+                <button mdbBtn color="info" block="true" class="my-4" type="submit">Ingresar</button>
+                
+                <p>No estás registrado?
+                    <a routerLink="/type-user">Registro</a>
+                </p>
+        </form>
     </div>
 </div>
 

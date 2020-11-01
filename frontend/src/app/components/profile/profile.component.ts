@@ -63,7 +63,7 @@ export class ProfileComponent implements OnInit {
       res => {
         if(res.estado=='inactivo'){
           this.router.navigate(['/verification']);
-          Sawl("Error", "Debe verificar su usuario para usar Jalón Universitario", "warning");
+          Sawl.fire("Error", "Debe verificar su usuario para usar Jalón Universitario", "warning");
         }else{
           this.authService.getProfile()
           .subscribe(

@@ -7,9 +7,9 @@
             <div class="card-body">
                 <form (submit)="signUp()" >
                     <div class="form-group">
-                        <input type="text" [(ngModel)]="user.nombres" name="nombres" class="form-control" pattern="[a-zA-Z| ]*" placeholder="Nombre" #nombres="ngModel" minlength="4" required autofocus>
+                        <input mdbInput mdbValidate type="text" [(ngModel)]="user.nombres" name="nombres" class="form-control" pattern="[a-zA-Z| ]*" placeholder="Nombre" #nombres="ngModel" minlength="4" required autofocus>
                     </div>
-                    <div *ngIf="nombres.invalid && (nombres.dirty || nombres.touched)" class="alert alert-danger">
+                    <div *ngIf="nombres.invalid && (nombres.dirty || nombres.touched)" class="alert alert-warning" role="alert">
                         <div *ngIf="nombres.errors.required">
                             Debe ingresar su nombre.
                         </div>
@@ -21,9 +21,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" [(ngModel)]="user.apellidos" name="apellidos" class="form-control" pattern="[a-zA-Z| ]*" #apellidos="ngModel" minlength="4" placeholder="Apellidos" required>
+                        <input mdbInput mdbValidate type="text" [(ngModel)]="user.apellidos" name="apellidos" class="form-control" pattern="[a-zA-Z| ]*" #apellidos="ngModel" minlength="4" placeholder="Apellidos" required>
                     </div>
-                        <div *ngIf="apellidos.invalid && (nombres.dirty || apellidos.touched)" class="alert alert-danger">
+                        <div *ngIf="apellidos.invalid && (nombres.dirty || apellidos.touched)" class="alert alert-warning" role="alert">
 
                             <div *ngIf="apellidos.errors.required">
                                 Debe ingresar su apellido.
@@ -36,9 +36,9 @@
                             </div>
                         </div>
                     <div class="form-group">
-                        <input type="email" [(ngModel)]="user.email" name="email" class="form-control"  minlength="13" #correo="ngModel" placeholder="Correo Institucional" required>
+                        <input mdbInput mdbValidate  type="email" [(ngModel)]="user.email" name="email" class="form-control"  minlength="13" #correo="ngModel" placeholder="Correo Institucional" required>
                     </div>
-                        <div *ngIf="correo.invalid && (nombres.dirty || correo.touched)" class="alert alert-danger">
+                        <div *ngIf="correo.invalid && (nombres.dirty || correo.touched)" class="alert alert-warning" role="alert">
                             <div *ngIf="correo.errors.required">
                                 Debe ingresar el correo electrónico.
                             </div>
@@ -47,9 +47,9 @@
                             </div>
                         </div>
                     <div class="form-group">
-                        <input type="text" [(ngModel)]="user.numeroCuenta" name="numeroCuenta" maxlength="11" pattern="[0-9]*" #cuenta="ngModel" class="form-control" placeholder="Numero de Cuenta" required>
+                        <input type="text" mdbInput mdbValidate [(ngModel)]="user.numeroCuenta" name="numeroCuenta" maxlength="11" pattern="[0-9]*" #cuenta="ngModel" class="form-control" placeholder="Numero de Cuenta" required>
                     </div>
-                        <div *ngIf="cuenta.invalid && (nombres.dirty || cuenta.touched)" class="alert alert-danger">
+                        <div *ngIf="cuenta.invalid && (nombres.dirty || cuenta.touched)" class="alert alert-warning" role="alert">
 
                             <div *ngIf="cuenta.errors.required">
                                 Debe ingresar su número de cuenta.
@@ -61,20 +61,32 @@
                                 El numero de cuenta solo puede incluir números.
                             </div>
                         </div>
+                    <div [formGroup]="signup">
+                        <div class="form-group input-group">
+                            <input mdbInput mdbValidate (change)="verify()" type="password" mdbActive  id="defaultLoginFormPassword" name="password" [type]="hide2 ? 'password' : 'text'" formControlName="password" class="form-control" placeholder="Contraseña" aria-label="Recipient's username" aria-describedby="basic-addon2" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2"> <mdb-icon fas icon="eye-slash" *ngIf="hide2==true else eyeOpen" (click)="hide2 = !hide2"></mdb-icon></span>
+                                    <ng-template #eyeOpen >
+                                        <mdb-icon fas icon="eye" (click)="hide2 = !hide2"></mdb-icon>
+                                    </ng-template>
+                            </div>
+                            
+                        </div>
+                        <div [innerHTML]="template"></div>
+                        <div class="form-group input-group"> 
+                            <input mdbInput mdbValidate type="password" mdbActive  id="defaultLoginFormPassword1" name="vpassword" [type]="hide ? 'password' : 'text'" formControlName="vpassword" class="form-control" placeholder="Confirma tu Contraseña" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2"> <mdb-icon fas icon="eye-slash" *ngIf="hide==true else eyeOpen2" (click)="hide = !hide"></mdb-icon></span>
+                                    <ng-template #eyeOpen2 >
+                                        <mdb-icon fas icon="eye" (click)="hide = !hide"></mdb-icon>
+                                    </ng-template>
+                            </div>                       
+                        </div>
+                    </div>
                     <div class="form-group">
-                        <show-hide-password  btnStyle="primary"  [btnOutline]="true">
-                            <input type="password" [(ngModel)]="user.password"  name="password" placeholder="Contraseña" required>
-                        </show-hide-password>
+                        <input mdbInput mdbValidate  type="text" [(ngModel)]="user.telefono" name="telefono" class="form-control" #telefono= "ngModel" maxlength="8" pattern="[0-9]*" placeholder="Número de Teléfono" required autofocus>
                     </div>
-                    <div class="form-group"> 
-                        <show-hide-password  btnStyle="primary"  [btnOutline]="true">    
-                            <input type="password" class="form-control" name="vpassword" [(ngModel)]="user.vpassword" placeholder="Verificar Contraseña" required> 
-                        </show-hide-password>                       
-                    </div>
-                    <div class="form-group">
-                        <input type="text" [(ngModel)]="user.telefono" name="telefono" class="form-control" #telefono= "ngModel" maxlength="8" pattern="[0-9]*" placeholder="Número de Teléfono" required autofocus>
-                    </div>
-                    <div *ngIf="telefono.invalid && (nombres.dirty || telefono.touched)" class="alert alert-danger">
+                    <div *ngIf="telefono.invalid && (nombres.dirty || telefono.touched)" class="alert alert-warning" role="alert">
                         <div *ngIf="telefono.errors.required">
                             Debe ingresar su número de telefono.
                         </div>

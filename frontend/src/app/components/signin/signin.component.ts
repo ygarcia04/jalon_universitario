@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 
 import { Router } from "@angular/router";
@@ -12,6 +13,14 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
   styleUrls: ['./signin.component.scss']
 })
 export class SigninComponent implements OnInit {
+  signin: FormGroup = new FormGroup({
+    email: new FormControl('', [Validators.email, Validators.required ]),
+    password: new FormControl('', [Validators.required, Validators.min(3) ])
+  });s
+  hide = true;
+  get emailInput() { return this.signin.get('email'); }
+  get passwordInput() { return this.signin.get('password'); }
+
 
   user={
     email:'',
@@ -27,6 +36,13 @@ export class SigninComponent implements OnInit {
   }
 
   signIn(){
+    this.user.email=this.signin.value.email;
+    this.user.password=this.signin.value.password;
+    if(!this.user.password.match(/[+@unah.hn]/)){
+      Swal.fire("Error", "Solo los correos institucionales de la UNAH son permitidos", "warning");
+      return false;
+    }
+    console.log(this.user);
     this.authservice.signIn(this.user)
     .subscribe(
       res =>{ 

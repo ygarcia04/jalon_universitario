@@ -106,14 +106,13 @@ export class EditProfileComponent implements OnInit {
 editarPerfil(){
   Swal.fire({
     title: "Seguro que quieres actualizar tus cuenta?",
-    icon: 'warning',
+    icon: 'question',
     showDenyButton: true,
     confirmButtonText: 'Continuar',
     denyButtonText: 'Cancelar',
   })
   .then((Delete)=>{
     if(Delete.isConfirmed){
-      console.log(this.profile);
   this.authService.editProfile(this.profile)
   .subscribe(
     res =>{

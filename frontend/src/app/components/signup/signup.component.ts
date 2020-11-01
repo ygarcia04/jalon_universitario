@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 //inicializando servicio para autenticar
 import { AuthService } from "../../services/auth.service";
 //para redireccionar
@@ -12,6 +13,17 @@ import * as alertify from 'alertifyjs';
 })
 export class SignupComponent implements OnInit {
 
+  signup: FormGroup = new FormGroup({
+    email: new FormControl('', [Validators.email, Validators.required ]),
+    password: new FormControl('', [Validators.required, Validators.min(3) ]),
+    vpassword: new FormControl('', [Validators.required, Validators.min(3) ])
+  });s
+  hide = true;
+  hide2= true;
+  get emailInput() { return this.signup.get('email'); }
+  get passwordInput() { return this.signup.get('password'); }
+  get vpasswordInput() { return this.signup.get('vpassword'); }
+
   user ={
     email:'',
     password: '',
@@ -24,7 +36,9 @@ export class SignupComponent implements OnInit {
     fechaNacimiento:'',
     telefono: '',
     sexo: ''
-  }
+  };
+  template='';
+  validate=true;
 
   public data: string[] = ['Ciencias Sociales', 'Química y Farmacia', 'Odontología',
   'Ciencias Jurídicas', 'Ingeniería', 'Humanidades y Artes', 'Ciencias Espaciales', 'Ciencias',
@@ -37,8 +51,42 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void { 
   }
+  verify(){
+    var pass= this.signup.value.password;
+    console.log(pass);
+    if(pass.length<8){
+      this.template='<div class="alert alert-warning" role="alert"><div>La contraseña debe tener al menos 8 caracteres.</div></div>';
+      this.validate=false;
+    }else if(!pass.match(/[0-9]/)){
+      this.template='<div class="alert alert-warning" role="alert"><div>Debe incluir al menos un número en su contraseña.</div></div>';
+      this.validate=false;
+    }else if(!pass.match(/[A-Z]/)){
+      this.template='<div class="alert alert-warning" role="alert"><div>Debe incluir al menos una mayúscula en su contraseña.</div></div>';
+      this.validate=false;
+    }else if(!pass.match(/[a-z]/)){
+      this.template='<div class="alert alert-warning" role="alert"><div>Debe incluir al menos una minúscula en su contraseña.</div></div>';
+      this.validate=false;
+    }else if(!pass.match(/[_\/\*\$.\\\[\]\(\):;,\?!@#¬'+\{\}`^¨]/)){
+      this.template='<div class="alert alert-warning" role="alert"><div>Debe incluir al menos un caracter NO alfa-numérico en su contraseña.</div></div>';
+      this.validate=false;
+    }else{
+      this.template='';
+      this.validate=true;
+    }
+  }
   
   signUp(){
+    if(this.validate==false){
+      alertify.error('Verifique todos los campos ingresados');
+      return false;
+    }
+    this.user.password = this.signup.value.password;
+    if(this.user.password==""){
+      this.template='<div class="alert alert-warning" role="alert"><div>No puede dejar la contraseña en blanco.</div></div>';
+      return false;
+    }
+    this.user.vpassword = this.signup.value.vpassword;
+    console.log(this.user);
     if(this.user.nombres==""){
       alertify.error('No puede dejar el nombre en blanco');
     }else if(this.user.apellidos==""){
@@ -85,7 +133,7 @@ export class SignupComponent implements OnInit {
         err =>{
           //console.log(err);
           //this.router.navigate(['/signin']);
-          Swal.fire("Error", "Sus datos ya existen en la base!", "warning");
+          Swal.fire("Error", "Hubo un error en el sistema, favor intente de nuevo!", "error");
           this.router.navigate(['/signup']);
         }
       )

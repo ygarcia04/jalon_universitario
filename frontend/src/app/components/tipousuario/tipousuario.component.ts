@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../../services/auth.service";
 import { Router } from "@angular/router";
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import Swal from "sweetalert2/dist/sweetalert2.js";
 
 
@@ -10,6 +11,7 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
   styleUrls: ['./tipousuario.component.scss']
 })
 export class TipousuarioComponent implements OnInit {
+
 
   constructor( private authService: AuthService,
     private router: Router) { }

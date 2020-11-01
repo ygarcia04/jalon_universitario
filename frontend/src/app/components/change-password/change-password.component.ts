@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from "@angular/common/http";
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from "@angular/router";
 import Swal from 'sweetalert2/dist/sweetalert2.js';
@@ -12,7 +13,18 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
 })
 
 export class ChangePasswordComponent implements OnInit {
-
+  changePassw: FormGroup = new FormGroup({
+    contrasenaActual: new FormControl('', [ Validators.required ]),
+    contrasenaNueva1: new FormControl('', [Validators.required, Validators.min(8) ]),
+    contrasenaNueva2: new FormControl('', [Validators.required, Validators.min(8) ]),
+  });s
+  hide = true;
+  hide2=true;
+  hide3=true;
+  get contrasenaActualInput() { return this.changePassw.get('contrasenaActual'); }
+  get contrasenaNueva1Input() { return this.changePassw.get('contrasenaNueva1'); }
+  get contrasenaNueva2Input() { return this.changePassw.get('contrasenaNueva2'); }
+  
   user={
     contrasenaActual:'',
     contrasenaNueva1:'',
@@ -55,6 +67,9 @@ changePass(){
   })
   .then((Delete)=>{
     if(Delete.isConfirmed){
+      this.user.contrasenaActual=this.changePassw.value.contrasenaActual;
+      this.user.contrasenaNueva1=this.changePassw.value.contrasenaNueva1;
+      this.user.contrasenaNueva2=this.changePassw.value.contrasenaNueva2;
       this.authservice.changePassword(this.user)
   .subscribe(
     res =>{ 
