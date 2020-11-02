@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from "@angular/router";
 import {  HttpErrorResponse} from "@angular/common/http";
 import Swal from "sweetalert2/dist/sweetalert2.js";
@@ -10,6 +11,16 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
   styleUrls: ['./delete-account.component.scss']
 })
 export class DeleteAccountComponent implements OnInit {
+
+  deleteUserForm: FormGroup = new FormGroup({
+    contrasenaNueva1: new FormControl('', [Validators.required, Validators.min(8) ]),
+    contrasenaNueva2: new FormControl('', [Validators.required, Validators.min(8) ]),
+  });s
+  hide2=true;
+  hide3=true;
+  get contrasenaNueva1Input() { return this.deleteUserForm.get('contrasenaNueva1'); }
+  get contrasenaNueva2Input() { return this.deleteUserForm.get('contrasenaNueva2'); }
+  
   user={
     contrasenaNueva1:'',
     contrasenaNueva2:''
@@ -21,6 +32,8 @@ export class DeleteAccountComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.user.contrasenaNueva1=this.deleteUserForm.value.contrasenaNueva1;
+      this.user.contrasenaNueva2=this.deleteUserForm.value.contrasenaNueva2;
     this.authservice.userState()
     .subscribe(
       res => {
