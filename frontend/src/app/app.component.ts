@@ -8,6 +8,11 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(public authService: AuthService){}
+anio:Number;
+  constructor(public authService: AuthService){
+  let date = new Date();
+   this.anio=date.getFullYear(); 
+
+  }
   title = 'frontend';
 }

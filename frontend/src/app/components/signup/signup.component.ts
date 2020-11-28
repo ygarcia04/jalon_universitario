@@ -24,6 +24,7 @@ export class SignupComponent implements OnInit {
   get passwordInput() { return this.signup.get('password'); }
   get vpasswordInput() { return this.signup.get('vpassword'); }
 
+  anio:Number;
   user ={
     email:'',
     password: '',
@@ -47,7 +48,10 @@ export class SignupComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router
-    ) { }
+    ) { 
+      let date = new Date();
+      this.anio=date.getFullYear(); 
+    }
 
   ngOnInit(): void { 
   }

@@ -27,7 +27,7 @@ export class ProfileComponent implements OnInit {
     edad:''
   }
 
-  constructor(private authService: AuthService, private miDatePipe: DatePipe,
+  constructor(public authService: AuthService, private miDatePipe: DatePipe,
     private router: Router) { }
 
 
@@ -58,6 +58,9 @@ export class ProfileComponent implements OnInit {
 
 
   ngOnInit() {
+    if(this.authService.loggedInAdmin()){
+      this.router.navigate(['/admin']);
+    }else{
     this.authService.userState()
     .subscribe(
       res => {
@@ -93,7 +96,7 @@ export class ProfileComponent implements OnInit {
         }
       }
     )
-   
+    }
   }
 
   getEdad(fecha){

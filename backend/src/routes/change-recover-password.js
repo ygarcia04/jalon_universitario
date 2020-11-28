@@ -5,7 +5,7 @@ const user = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require ('bcrypt-nodejs');
 
-router.post('/recover-password', async (req, res) => {
+router.post('/api/recover-password', async (req, res) => {
         const {contrasenaNueva1, contrasenaNueva2 } = req.body;
         if(contrasenaNueva1!=contrasenaNueva2){
             return res.json({estado:'password'});

@@ -7,10 +7,10 @@ const user = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require ('bcrypt-nodejs');
 
-router.get('/', (req, res)=> res.send('Hello-World'));
+router.get('/api/', (req, res)=> res.send('Hello-World'));
 
 //La funcion debe ser async para poder usar await
-router.post('/signup', async (req, res)=>{
+router.post('/api/signup', async (req, res)=>{
     //guardar los valores de los datos recibidos en formato json
     const { nombres, apellidos, email, password, vpassword, numeroCuenta, direccion, facultad, fechaNacimiento, telefono, sexo}= req.body;
     //Creando el objeto usuario usando el modelo en users.js
@@ -46,7 +46,7 @@ router.post('/signup', async (req, res)=>{
             const salt = bcrypt.genSaltSync();
             const hash= bcrypt.hashSync(password, salt);
             /*GUARDADO EN LA BASE*/
-            const newUser = new user ({nombres, apellidos, email:email_l, password:hash,numeroCuenta, codigo:codigoS, estado:"inactivo", direccion, facultad, fechaNacimiento, telefono, sexo, token:"", temporal_pass:""});
+            const newUser = new user ({nombres, apellidos, email:email_l, password:hash,numeroCuenta, codigo:codigoS, estado:"inactivo", direccion, facultad, fechaNacimiento, telefono, sexo, intentos:0, token:"", temporal_pass:""});
             await newUser.save();
             const token = await jwt.sign({_id: newUser._id}, 'secretkey');
             await user.updateOne({email:email_l},{$set:{token:token}});
@@ -62,7 +62,7 @@ router.post('/signup', async (req, res)=>{
                     from: 'correop726@gmail.com',
                     to: email_l,
                     subject: 'Codigo de Verificación Jalón Universitario',
-                    html: "Hola, su código de verificación es: <br><br>" + codigoS
+                    html: "Gracias por unirse a Jalón Universitario<br> Para activar su cuenta puede hacer click en el siguiente enlace:<br><br><a href='https://www.jalonuniversitario.tk/verification-link?user="+email_l+"&code="+codigoS+"'>Activar Cuenta</a> <br><br> Si el enlace no funciona puede usar el siguiente codigo en la pantalla de verificacion: <br><br><b>" + codigoS+"</b>"
                 };
                 transporter.sendMail(mailOptions, function(error, info){
                     if (error) {
@@ -80,26 +80,8 @@ router.post('/signup', async (req, res)=>{
         }    
     });
 
-    router.post('/verification', verifyToken, async (req, res) => {
-        const { codigo } = req.body;
-        let token = req.headers.authorization.split(' ')[1]
-        try {   
-            const User = await user.findOne({token});
-            console.log(User);
-            if(codigo==User.codigo){
-                email = User.email; 
-                await user.updateOne({email},{$set:{estado:"activo",codigo:""}});
-                res.json({estado:'Hecho', token});
-            }else{
-                res.json({estado:'Fallo', token});
-            }       
-        } catch (error) {
-            console.log('Error en el sistema');
-            res.json({estado:'Sistema', token});
-        }
-    });
     
-    router.get('/profile',verifyToken, async (req, res) => {
+    router.get('/api/profile',verifyToken, async (req, res) => {
         let token_l = req.headers.authorization.split(' ')[1];
         try {
             const User= await user.findOne({token:token_l});
@@ -111,7 +93,7 @@ router.post('/signup', async (req, res)=>{
         
     });
 
-    router.get('/user-state', async (req, res) => {
+    router.get('/api/user-state', async (req, res) => {
         let token_l = req.headers.authorization.split(' ')[1];
         try {
             const User= await user.findOne({token:token_l});

@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from "@angular/router";
 import Swal from 'sweetalert2/dist/sweetalert2.js';
-
+import * as alertify from 'alertifyjs';
 
 @Component({
   selector: 'app-change-password',
@@ -30,12 +30,38 @@ export class ChangePasswordComponent implements OnInit {
     contrasenaNueva1:'',
     contrasenaNueva2:''
   }
+  template='';
+  validate=true;
 
   constructor(
     private authservice:AuthService,
     private router: Router
   ) { 
     ;
+  }
+
+  verify(){
+    var pass= this.changePassw.value.contrasenaNueva1;
+    console.log(pass);
+    if(pass.length<8){
+      this.template='<div class="alert alert-warning" role="alert"><div>La contraseña debe tener al menos 8 caracteres.</div></div>';
+      this.validate=false;
+    }else if(!pass.match(/[0-9]/)){
+      this.template='<div class="alert alert-warning" role="alert"><div>Debe incluir al menos un número en su contraseña.</div></div>';
+      this.validate=false;
+    }else if(!pass.match(/[A-Z]/)){
+      this.template='<div class="alert alert-warning" role="alert"><div>Debe incluir al menos una mayúscula en su contraseña.</div></div>';
+      this.validate=false;
+    }else if(!pass.match(/[a-z]/)){
+      this.template='<div class="alert alert-warning" role="alert"><div>Debe incluir al menos una minúscula en su contraseña.</div></div>';
+      this.validate=false;
+    }else if(!pass.match(/[_\/\*\$.\\\[\]\(\):;º!·&,\?!@#¬'+\{\}`^¨]/)){
+      this.template='<div class="alert alert-warning" role="alert"><div>Debe incluir al menos un caracter NO alfa-numérico en su contraseña.</div></div>';
+      this.validate=false;
+    }else{
+      this.template='';
+      this.validate=true;
+    }
   }
 
   ngOnInit(): void {
@@ -58,6 +84,15 @@ export class ChangePasswordComponent implements OnInit {
   }
 
 changePass(){
+  if(this.validate==false){
+    alertify.error('Verifique todos los campos ingresados');
+    return false;
+  }
+  this.user.contrasenaNueva1 = this.changePassw.value.contrasenaNueva1;
+  if(this.user.contrasenaNueva1 ==""){
+    this.template='<div class="alert alert-warning" role="alert"><div>No puede dejar la contraseña en blanco.</div></div>';
+    return false;
+  }
   Swal.fire({
     title: "Seguro que quiere cambiar su contraseña?",
     icon: 'question',

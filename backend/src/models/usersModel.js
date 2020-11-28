@@ -14,6 +14,7 @@ const userSchema = new Schema({
     fechaNacimiento: Date,
     telefono: String,
     sexo: String,
+    intentos:Number,
     token: String,
     temporal_pass:String 
 }, {

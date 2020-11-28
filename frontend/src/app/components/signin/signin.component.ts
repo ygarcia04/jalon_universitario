@@ -33,13 +33,19 @@ export class SigninComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    if(this.authservice.loggedInAdmin()){
+      this.router.navigate(['/admin'])
+    }
+    if(this.authservice.loggedIn()){
+      this.router.navigate(['/profile'])
+    }
   }
 
   signIn(){
     this.user.email=this.signin.value.email;
     this.user.password=this.signin.value.password;
-    if(!this.user.password.match(/[+@unah.hn]/)){
-      Swal.fire("Error", "Solo los correos institucionales de la UNAH son permitidos", "warning");
+    if(!this.user.email.match(/@jalonuniversitario.tk$/) && !this.user.email.match(/@unah.hn$/)){
+      Swal.fire("Error", "El correo no se encuentra en la base", "warning");
       return false;
     }
     console.log(this.user);
@@ -55,11 +61,18 @@ export class SigninComponent implements OnInit {
           localStorage.setItem('token', res.token);
           Swal.fire("Inactivo", "Su usuario esta inactivo, debe activarlo para ingresar", "warning");
           this.router.navigate(['/verification']);
-
+        }else if(res.estado=='bloqueado'){     
+          Swal.fire("Usuario Bloqueado", "Su usuario ha sido bloqueado por intentos de inicio fallidos, podrá recuperar su cuenta, confirmando su correo", "warning");
+          this.router.navigate(['/rec-password']);
         }else if(res.estado=='temporal'){
           localStorage.setItem('token', res.token);
           Swal.fire("Bienvenido", "Ahora puede cambiar su contraseña", "success");
           this.router.navigate(['/recover-pass']);
+
+        }else if(res.estado=='admin'){
+          localStorage.setItem('admin', res.token);
+          Swal.fire("Bienvenido","", "success");
+          this.router.navigate(['/admin']);
 
         }else{
         console.log(res.token);

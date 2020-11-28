@@ -1,97 +1,99 @@
-<div class="container emp-profile">
-    <form >   
-        <ng-container>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="profile-img">
-                        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt=""/>
-                        <!--div class="file btn btn-lg btn-primary">
-                            Cambiar foto
-                            <input type="file" name="file"/>
-                        </div-->
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="profile-head">
-                                <h5>
-                                   {{profile.nombres}} {{profile.apellidos}}
-                                </h5>
-                                <h6>
-                                    Facultad de {{profile.facultad}}
-                                </h6>                           
-                       
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <button (click)="editar()" class="profile-edit-btn">Editar Perfil</button>
-                </div>
-            </div>
-            <div class="row">
-                
-                <div class="col-md-8">
-                    <div class="tab-content profile-tab" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                    <br>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label>Direccion:</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>{{profile.direccion}}</p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label>Email:</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>{{profile.email}}</p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label>Numero de cuenta:</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>{{profile.numeroCuenta}}</p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label>Numero de telefono:</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>{{profile.telefono}}</p>
-                                        </div>
-                                       
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label>Fecha de nacimiento:</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>{{profile.fechaNacimiento}}</p>
-                                        </div> 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label>Edad:</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>{{profile.edad}} años</p>
-                                        </div> 
-                                    </div>         
+<div style="padding-bottom: 15%">
+    <div *ngIf="!this.authService.loggedInAdmin()" class="container emp-profile">
+        <form >   
+            <ng-container>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="profile-img">
+                            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt=""/>
+                            <!--div class="file btn btn-lg btn-primary">
+                                Cambiar foto
+                                <input type="file" name="file"/>
+                            </div-->
                         </div>
-                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="profile-head">
+                                    <h5>
+                                       {{profile.nombres}} {{profile.apellidos}}
+                                    </h5>
+                                    <h6>
+                                        Facultad de {{profile.facultad}}
+                                    </h6>                           
+                           
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button (click)="editar()" class="profile-edit-btn">Editar Perfil</button>
                     </div>
                 </div>
-            </div>
+                <div class="row">
+                    
+                    <div class="col-md-8">
+                        <div class="tab-content profile-tab" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Direccion:</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{profile.direccion}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Email:</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{profile.email}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Numero de cuenta:</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{profile.numeroCuenta}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Numero de telefono:</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{profile.telefono}}</p>
+                                            </div>
+                                           
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Fecha de nacimiento:</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{profile.fechaNacimiento}}</p>
+                                            </div> 
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Edad:</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>{{profile.edad}} años</p>
+                                            </div> 
+                                        </div>         
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
 
 
-        </ng-container>
+            </ng-container>
 
 
-    </form>           
+        </form>           
+    </div>
 </div>
 
 

@@ -8,8 +8,8 @@ import Swal from 'sweetalert2/dist/sweetalert2.js';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule, HTTP_INTERCEPTORS, HttpClient} from '@angular/common/http';
 import { Observable } from "rxjs";
-import { ShowHidePasswordModule } from 'ngx-show-hide-password';
 import { ComboBoxModule } from '@syncfusion/ej2-angular-dropdowns';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 //Imports de componentes y servicios
 import { AuthGuard } from "./guards/auth.guard";
@@ -28,6 +28,13 @@ import { SigninComponent } from './components/signin/signin.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { TipousuarioComponent } from './components/tipousuario/tipousuario.component';
 import { VerificationComponent } from './components/verification/verification.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { VerificationLinkComponent } from './components/verification-link/verification-link.component';
+import { ResendCodeComponent } from './components/resend-code/resend-code.component';
+import { UsersComponent } from './components/users/users.component';
+import { UsersActComponent } from './components/users-act/users-act.component';
+import { UsersInactComponent } from './components/users-inact/users-inact.component';
+import { UsersBloqComponent } from './components/users-bloq/users-bloq.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +49,14 @@ import { VerificationComponent } from './components/verification/verification.co
     SigninComponent,
     SignupComponent,
     TipousuarioComponent,
-    VerificationComponent
+    VerificationComponent,
+    AdminComponent,
+    VerificationLinkComponent,
+    ResendCodeComponent,
+    UsersComponent,
+    UsersActComponent,
+    UsersInactComponent,
+    UsersBloqComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +65,6 @@ import { VerificationComponent } from './components/verification/verification.co
     MDBBootstrapModule.forRoot(),
     BrowserAnimationsModule,
     HttpClientModule,
-    ShowHidePasswordModule,
     ReactiveFormsModule,
     ComboBoxModule,
     FormsModule,
@@ -60,10 +73,12 @@ import { VerificationComponent } from './components/verification/verification.co
   providers: [
     AuthService, 
     AuthGuard,
+  
     {
       provide:HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
       multi: true
+      
     }
     
   ],
