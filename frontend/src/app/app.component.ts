@@ -1,13 +1,18 @@
 import { Component } from '@angular/core';
-import { AuthService } from './services/auth.service';
+import { AuthService  } from "./services/auth.service";
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 @Component({
-  selector: 'app-root',
+  selector: 'abe-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+anio:Number;
+  constructor(public authService: AuthService){
+  let date = new Date();
+   this.anio=date.getFullYear(); 
 
-  constructor(private authService: AuthService) {}
+  }
   title = 'frontend';
 }

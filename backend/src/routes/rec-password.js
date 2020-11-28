@@ -6,7 +6,7 @@ const user = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require ('bcrypt-nodejs');
 
-router.post('/rec-password', async (req, res)=>{
+router.post('/api/rec-password', async (req, res)=>{
     //guardar los valores de los datos recibidos en formato json
     const { email}= req.body;
     //Creando el objeto usuario usando el modelo en users.js

@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 
 
 
-router.post('/edit-profile', verifyToken, async (req, res) => {
+router.post('/api/edit-profile', verifyToken, async (req, res) => {
     const { telefono, direccion, facultad } = req.body;
     let token = req.headers.authorization.split(' ')[1];
     try {   

@@ -6,7 +6,7 @@ const user = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require ('bcrypt-nodejs');
 
-router.post('/change-password', verifyToken, async (req, res) => {
+router.post('/api/change-password', verifyToken, async (req, res) => {
         const { contrasenaActual, contrasenaNueva1, contrasenaNueva2 } = req.body;
         if(contrasenaNueva1!=contrasenaNueva2){
             return res.json({estado:'password'});
