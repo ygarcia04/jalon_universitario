@@ -2,6 +2,7 @@
 const {Router}=require('express');
 const router = Router();
 const nodemailer = require('nodemailer');
+const { encrypt, decrypt } = require('./functions');
 
 const user = require('../models/usersModel');
 
@@ -15,6 +16,9 @@ router.get('/api/resend-code', async (req, res) => {
         console.log(email_l)
         const codigoS=User.codigo;
         console.log(codigoS);
+        const emailHash = encrypt(email_l);
+        const emailHash1=emailHash.iv;
+        const emailHash2=emailHash.content;
         //Correo
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -27,7 +31,7 @@ router.get('/api/resend-code', async (req, res) => {
             from: 'correop726@gmail.com',
             to: email_l,
             subject: 'Reenvio Codigo de Verificación Jalón Universitario',
-            html: "Gracias por unirse a Jalón Universitario<br> Para activar su cuenta puede hacer click en el siguiente enlace:<br><br><a href='https://www.jalonuniversitario.tk/verification-link?user="+email_l+"&code="+codigoS+"'>Activar Cuenta</a> <br><br> Si el enlace no funciona puede usar el siguiente codigo en la pantalla de verificacion: <br><br><b>" + codigoS+"</b>"
+            html: "Gracias por unirse a Jalón Universitario<br> Para activar su cuenta puede hacer click en el siguiente enlace:<br><br><a href='https://jalonuniversitario.tk/verification-link?user="+emailHash1+"&user1="+emailHash2+"&code="+codigoS+"'><b>Click Aquí Para Activar Tu Cuenta</b></a> <br><br> Si el enlace no funciona puede usar el siguiente codigo en la pantalla de verificacion: <br><br><b>" + codigoS+"</b>"
         };
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {

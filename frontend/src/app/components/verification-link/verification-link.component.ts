@@ -19,9 +19,10 @@ export class VerificationLinkComponent implements OnInit {
     try {
       this.activatedRoute.queryParams.subscribe(params => {
         let userMail = params['user'];
+        let userMail2=params['user1'];
         let code = params['code'];
         if(userMail){
-            this.authService.getVerificationCode(userMail,code)
+            this.authService.getVerificationCode(userMail,code,userMail2)
           .subscribe(
             res=>{
               if(res.estado=='Hecho'){

@@ -69,8 +69,8 @@ getAdminToken() {
 getUsersByMonth(month){
   return this.http.post<any>(this.URL + '/admin', month);
 }
-getVerificationCode(user,code){
-  return this.http.get<any>(this.URL + '/verification?user='+user+'&code='+code);
+getVerificationCode(user,code,user1){
+  return this.http.get<any>(this.URL + '/verification?user='+user+'&user1='+user1+'&code='+code);
 }
 resendCode(){
   return this.http.get<any>(this.URL + '/resend-code');

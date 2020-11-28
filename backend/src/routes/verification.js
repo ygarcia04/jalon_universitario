@@ -1,6 +1,7 @@
 
 const {Router}=require('express');
 const router = Router();
+const { encrypt, decrypt } = require('./functions');
 
 const user = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
@@ -30,25 +31,29 @@ router.post('/api/verification', async (req, res) => {
 router.get('/api/verification', async (req, res) => {
     
     try {
-        const userV=req.query.user;
+        const userIv=req.query.user;
+        const userContent=req.query.user1;
         const code=req.query.code;
-        if(User= await user.findOne({email:userV})){
+        const hash={
+            iv: userIv,
+            content: userContent
+        }
+        const dec_email = decrypt(hash);
+        if(User= await user.findOne({email:dec_email})){
             if(code==User.codigo){
                 const token = jwt.sign({_id: User._id}, 'secretkey');
-                await user.updateOne({email:userV},{$set:{estado:"activo",codigo:"",token}});
+                await user.updateOne({email:dec_email},{$set:{estado:"activo",codigo:"",token}});
                 res.json({estado:'Hecho', token});
             }else{
                 res.json({estado:'codigo'});
             }
-            
-            console.log(User);
 
         }else{
             console.log('No existe usuario');
             res.json({estado:'usuario'});
         }      
     } catch (error) {
-        console.log('Error en el sistema');
+        console.log(error);
         res.json({estado:'Sistema'});
     }
 });

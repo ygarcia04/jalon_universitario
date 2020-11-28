@@ -14,11 +14,7 @@ router.post('/api/admin', async (req, res) => {
         const active = await user.countDocuments({ "$expr": { "$and":[{"$eq": [ { "$month": "$createdAt" }, month]},{"$eq":["$estado","activo"]}]} });
         const inactive = await user.countDocuments({ "$expr": { "$and":[{"$eq": [ { "$month": "$createdAt" }, month]},{"$eq":["$estado","inactivo"]}]} });
         const blocked = await user.countDocuments({ "$expr": { "$and":[{"$eq": [ { "$month": "$createdAt" }, month]},{"$eq":["$estado","bloqueado"]}]} });
-        console.log('Activos'+active);
-        console.log('Cantidad por mes: '+month+' '+vmonth);
         const usuario = await user.find({ "$expr": { "$eq":["$estado","inactivo"] } });
-        console.log(usuario);
-        //console.log(User);
         res.json({month:vmonth,active,inactive,blocked});     
     } catch (error) {
         console.log(error);

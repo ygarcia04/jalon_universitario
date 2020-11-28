@@ -9,6 +9,8 @@ const bcrypt = require ('bcrypt-nodejs');
 
 
 router.post('/api/signin', async (req, res) => {
+    
+
         const { email, password } = req.body;
         const email_l =email.toLowerCase(); 
         const Admin = await admin.findOne({email:email_l});

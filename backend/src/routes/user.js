@@ -6,6 +6,8 @@ const nodemailer = require('nodemailer');
 const user = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require ('bcrypt-nodejs');
+const { encrypt, decrypt } = require('./functions');
+
 
 router.get('/api/', (req, res)=> res.send('Hello-World'));
 
@@ -50,6 +52,10 @@ router.post('/api/signup', async (req, res)=>{
             await newUser.save();
             const token = await jwt.sign({_id: newUser._id}, 'secretkey');
             await user.updateOne({email:email_l},{$set:{token:token}});
+            const emailHash = encrypt(email_l);
+            const emailHash1=emailHash.iv;
+            const emailHash2=emailHash.content;
+
             /*INICIO ENVIO DE CORREO */
                 const transporter = nodemailer.createTransport({
                     service: 'gmail',
@@ -62,7 +68,7 @@ router.post('/api/signup', async (req, res)=>{
                     from: 'correop726@gmail.com',
                     to: email_l,
                     subject: 'Codigo de Verificación Jalón Universitario',
-                    html: "Gracias por unirse a Jalón Universitario<br> Para activar su cuenta puede hacer click en el siguiente enlace:<br><br><a href='https://www.jalonuniversitario.tk/verification-link?user="+email_l+"&code="+codigoS+"'>Activar Cuenta</a> <br><br> Si el enlace no funciona puede usar el siguiente codigo en la pantalla de verificacion: <br><br><b>" + codigoS+"</b>"
+                    html: "Gracias por unirse a Jalón Universitario<br> Para activar su cuenta puede hacer click en el siguiente enlace:<br><br><a href='https://jalonuniversitario.tk/verification-link?user="+emailHash1+"&user1="+emailHash2+"&code="+codigoS+"'><b>Click Aquí Para Activar Tu Cuenta</b></a> <br><br> Si el enlace no funciona puede usar el siguiente codigo en la pantalla de verificacion: <br><br><b>" + codigoS+"</b>"
                 };
                 transporter.sendMail(mailOptions, function(error, info){
                     if (error) {
