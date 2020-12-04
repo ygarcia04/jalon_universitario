@@ -1,0 +1,36 @@
+
+  <div class="row" style="padding-bottom:15%;">
+    <div class="col-md-4 mx-auto pad2y">
+        <div class="card">
+            <div class="card-header" style="text-align: center;">
+                <b>Eliminar Cuenta</b>
+            </div>
+            <div class="card-body">
+                <form (submit)="deleteUser()" [formGroup]="deleteUserForm" >
+                    <div class="form-group input-group"> 
+                        <input mdbInput mdbValidate type="password" mdbActive  id="defaultLoginFormPassword" name="contrasenaNueva1" [type]="hide2 ? 'password' : 'text'" formControlName="contrasenaNueva1" class="form-control" placeholder="Contraseña Nueva" aria-label="Recipient's username" aria-describedby="basic-addon2" autofocus>
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon2"> <mdb-icon fas icon="eye-slash" *ngIf="hide2==true else eyeOpen2" (click)="hide2 = !hide2"></mdb-icon></span>
+                                <ng-template #eyeOpen2 >
+                                    <mdb-icon fas icon="eye" (click)="hide2 = !hide2"></mdb-icon>
+                                </ng-template>
+                        </div>                       
+                    </div>
+                    <div class="form-group input-group"> 
+                        <input mdbInput mdbValidate type="password" mdbActive  id="defaultLoginFormPassword2" name="contrasenaNueva2" [type]="hide3 ? 'password' : 'text'" formControlName="contrasenaNueva2" class="form-control" placeholder="Confirme Su Contraseña Nueva" aria-label="Recipient's username" aria-describedby="basic-addon3">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon3"> <mdb-icon fas icon="eye-slash" *ngIf="hide3==true else eyeOpen3" (click)="hide3 = !hide3"></mdb-icon></span>
+                                <ng-template #eyeOpen3 >
+                                    <mdb-icon fas icon="eye" (click)="hide3 = !hide3"></mdb-icon>
+                                </ng-template>
+                        </div>                       
+                    </div>
+                    <button type="submit" mdbBtn color="info" block="true">Confirmar contraseña</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
