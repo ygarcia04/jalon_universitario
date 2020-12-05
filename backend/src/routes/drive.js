@@ -2,7 +2,7 @@
 const router = Router();
 const path = require('path');
 const nodemailer = require('nodemailer');
-const drive = require('../models/driveModel');
+const drive = require('../models/driverModel');
 const user = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require ('bcrypt-nodejs');
@@ -15,8 +15,8 @@ router.post('/api/signupd', async (req, res)=>{
     //guardar los valores de los datos recibidos en formato json
     const {nombres, apellidos, email, password, vpassword, numeroCuenta,
         identidad, direccion, facultad, fechaNacimiento, telefono, sexo,
-        marca, modelo, tipo, color, motor, anio}= req.body;
-
+        marca, modelo, tipo, color, motor, anio, placa}= req.body;
+        console.log(placa);
     //Creando el objeto usuario usando el modelo en drive.js
     if (password != vpassword){
         return res.json({estado:'password'})
@@ -58,17 +58,18 @@ router.post('/api/signupd', async (req, res)=>{
            anioRegistro=new Date().getFullYear();
             const newUser = new drive ({nombres, apellidos, email:email_l, password:hash, numeroCuenta, identidad,
                 codigo:codigoS, estado:"inactivo", direccion, facultad, fechaNacimiento, telefono, sexo, 
-                picPerfil:imageName, intentos:0, marca, modelo, tipo, color, motor, anio, placa: '', picLicencia: "", 
+                picPerfil:imageName, intentos:0, marca, modelo, tipo, color, motor, anio, placa, picLicencia: "", 
                 picRevision: "", picPlaca:"", token:"", temporal_pass:"",anioRegistro,mesRegistro});
             await newUser.save();
             const token = await jwt.sign({_id: newUser._id}, 'secretkey');
             await drive.updateOne({email:email_l},{$set:{token:token}});
-            const emailHash = encrypt(email_l);
+            return res.status(200).json({estado:'hecho'});
+            /*const emailHash = encrypt(email_l);
             const emailHash1=emailHash.iv;
             const emailHash2=emailHash.content;
 
             /*INICIO ENVIO DE CORREO */
-                const transporter = nodemailer.createTransport({
+                /*const transporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
                     user: 'correop726@gmail.com',
@@ -79,15 +80,15 @@ router.post('/api/signupd', async (req, res)=>{
                     from: 'correop726@gmail.com',
                     to: email_l,
                     subject: 'Registro Jalón Universitario',
-                    html: "Gracias por unirse a Jalón Universitario<br> Posteriormente se le informará sobre la activación de su cuenta por este mismo medio </b>"
+                    html: "Gracias por unirse a Jalón Universitario<br><br>Posteriormente se le informará sobre la activación de su cuenta por este mismo medio.</b></b>"
                 };
                 transporter.sendMail(mailOptions, function(error, info){
                     if (error) {
                         return res.json({estado:'email'});
                     } else {
-                        res.status(200).json({token});
+                        return res.status(200).json({estado:'hecho'});
                     }
-                });
+                });*/
             /*FIN ENVIO DE CORREO*/         
           }
     

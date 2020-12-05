@@ -43,6 +43,7 @@ app.use(require('./routes/upload-profile-pic'));
 app.use(require('./routes/upload-licencia'));
 app.use(require('./routes/upload-revision'));
 app.use(require('./routes/upload-placa'));
+app.use(require('./routes/upload-profile-pic-driver'));
 
 app.listen(3000);
 console.log('server on port', 3000);

@@ -24,6 +24,11 @@
           <a class="nav-link" routerLink="/profile" routerLinkActive="active">Perfil</a>
         </li>
       </div>
+      <div *ngIf="authService.loggedInDriver();">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/profile-driver" routerLinkActive="active">Perfil</a>
+        </li>
+      </div>
       <div *ngIf="authService.loggedInAdmin();">
         <li class="nav-item">
           <a class="nav-link" routerLink="/admin" routerLinkActive="active">Administrador</a>

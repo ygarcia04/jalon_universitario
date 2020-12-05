@@ -36,6 +36,9 @@ import { UsersActComponent } from './components/users-act/users-act.component';
 import { UsersInactComponent } from './components/users-inact/users-inact.component';
 import { UsersBloqComponent } from './components/users-bloq/users-bloq.component';
 import { SignupdriveComponent } from './components/signupdrive/signupdrive.component';
+import { ProfileDriverComponent } from './components/profile-driver/profile-driver.component';
+import { EditProfileDriverComponent } from './components/edit-profile-driver/edit-profile-driver.component';
+import { DeleteDriverComponent } from './components/delete-driver/delete-driver.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +61,10 @@ import { SignupdriveComponent } from './components/signupdrive/signupdrive.compo
     UsersActComponent,
     UsersInactComponent,
     UsersBloqComponent,
-    SignupdriveComponent
+    SignupdriveComponent,
+    ProfileDriverComponent,
+    EditProfileDriverComponent,
+    DeleteDriverComponent
   ],
   imports: [
     BrowserModule,

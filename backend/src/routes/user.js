@@ -5,6 +5,7 @@ const path = require('path');
 const nodemailer = require('nodemailer');
 
 const user = require('../models/usersModel');
+const driver = require('../models/driverModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require ('bcrypt-nodejs');
 const { encrypt, decrypt } = require('./functions');
@@ -79,7 +80,7 @@ router.post('/api/signup', async (req, res)=>{
                     if (error) {
                         return res.json({estado:'email'});
                     } else {
-                        res.status(200).json({token});
+                        return res.status(200).json({estado:'hecho', token});
                     }
                 });
             /*FIN ENVIO DE CORREO*/         
@@ -92,11 +93,20 @@ router.post('/api/signup', async (req, res)=>{
     });
 
     
-    router.get('/api/profile',verifyToken, async (req, res) => {
+    router.get('/api/profile', async (req, res) => {
         let token_l = req.headers.authorization.split(' ')[1];
+        console.log(token_l);
         try {
-            const User= await user.findOne({token:token_l});
-            return res.json({User});
+            if(Driver= await driver.findOne({token:token_l})){
+                console.log(Driver);
+                return res.json({Driver});
+            }
+            if(User= await user.findOne({token:token_l}, {_id:0})){
+                console.log(User);
+                return res.json({User});
+            }
+            
+            
         } catch (error) {
             res.json({estado:'error', token_l});
             
@@ -107,12 +117,22 @@ router.post('/api/signup', async (req, res)=>{
     router.get('/api/user-state', async (req, res) => {
         let token_l = req.headers.authorization.split(' ')[1];
         try {
-            const User= await user.findOne({token:token_l});
-            if(User.estado=='inactivo'){
-                return res.json({estado:'inactivo'});
-            }else{
-                return res.json({estado:'activo'})
+            if(User= await user.findOne({token:token_l})){
+                if(User.estado=='inactivo'){
+                    return res.json({estado:'inactivo'});
+                }else{
+                    return res.json({estado:'activo'})
+                }
             }
+            if(Driver= await driver.findOne({token:token_l})){
+                console.log(Driver);
+                if(Driver.estado=='inactivo'){
+                    return res.json({estado:'inactivo'});
+                }else{
+                    return res.json({estado:'activo'})
+                }
+            }
+            
         } catch (error) {
             res.json({estado:'error'});
             

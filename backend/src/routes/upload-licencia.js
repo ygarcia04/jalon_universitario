@@ -3,7 +3,7 @@ const path = require('path');
 const { unlink } = require('fs-extra');
 const router = Router();
 var multer = require("multer");
-const drive = require('../models/driveModel');
+const drive = require('../models/driverModel');
 
 var dirlicencia='';
 var email = '';
@@ -61,7 +61,7 @@ router.post('/api/upload-profile-licencia', licencia.single('file'), async(req, 
         } 
 
     } catch (error) {
-
+       
         res.json({ estado: 'error' });
 
     }

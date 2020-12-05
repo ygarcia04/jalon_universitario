@@ -3,7 +3,9 @@ const path = require('path');
 const { unlink } = require('fs-extra');
 const router = Router();
 var multer = require("multer");
-const drive = require('../models/driveModel');
+const drive = require('../models/driverModel');
+const nodemailer = require('nodemailer');
+const { encrypt, decrypt } = require('./functions');
 
 var dirplaca='';
 var email = '';
@@ -41,18 +43,44 @@ const placa = multer({
 router.post('/api/upload-profile-placa', placa.single('file'), async(req, res) => {
 
     try {
-        console.log(dirplaca)
+        console.log('Esto es placas');
         //const image = new Image();
 
         // the file is uploaded when this route is called with formdata.
 
         // now you can store the file name in the db if you want for further reference.
         const Drive = await drive.findOne({email});
-        
         const perfilPath = path.join(__dirname, "../../placa", Drive.picPlaca);
             //console.log (perfilPath)
             email = Drive.email; 
             if(await drive.updateOne({email},{$set:{picPlaca:dirplaca}})){
+
+            const emailHash = encrypt(email);
+            const emailHash1=emailHash.iv;
+            const emailHash2=emailHash.content;
+
+            /*INICIO ENVIO DE CORREO */
+                const transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                    user: 'correop726@gmail.com',
+                    pass: 'Password.1234'
+                    }  
+                });
+                const mailOptions = {
+                    from: 'correop726@gmail.com',
+                    to: email,
+                    subject: 'Registro Jalón Universitario',
+                    html: "Gracias por unirse a Jalón Universitario<br><br>Posteriormente se le informará sobre la activación de su cuenta por este mismo medio.</b></b>"
+                };
+                transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                        return res.json({estado:'email'});
+                    } else {
+                        return res.status(200).json({estado:'hecho'});
+                    }
+                });
+            /*FIN ENVIO DE CORREO*/  
                 
             return res.json({estado:'Hecho'});
             }
@@ -61,8 +89,8 @@ router.post('/api/upload-profile-placa', placa.single('file'), async(req, res) =
         } 
 
     } catch (error) {
-
-        res.json({ estado: 'error' });
+        console.log(error);
+        return res.json({ estado: 'error' });
 
     }
 

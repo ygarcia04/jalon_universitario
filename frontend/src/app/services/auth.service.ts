@@ -17,16 +17,44 @@ export class AuthService {
     private sanitizer: DomSanitizer
     ) {}
     
-//verificar si esta logueado como conductor
+//Conductor
 loggedInDriver() {
   return !!localStorage.getItem('driver');
 }
 
 logoutDriver() {
   localStorage.removeItem('driver');
-  this.router.navigate(['/signin']);
+  this.
+  router.navigate(['/signin']);
 }
-//fin verificar si esta logueado como conductor
+getTokenDriver(){
+  return localStorage.getItem('driver');
+}
+getProfilePicDriver(){
+  return this.http.get(this.URL+'/profile-pic-driver', { responseType: 'blob' })
+    .pipe(
+      map(x => {
+        const urlToBlob = window.URL.createObjectURL(x) // get a URL for the blob
+        return this.sanitizer.bypassSecurityTrustResourceUrl(urlToBlob); // tell Anuglar to trust this value
+      }),
+    );
+}
+
+editProfileDriver(user){
+  return this.http.post<any>(this.URL + '/edit-profile-driver', user);
+
+}
+uploadProfileDriver(profile, id){
+
+  return this.http.post<any>(this.URL + '/upload-profile-pic-driver?id='+id, profile);  
+}
+deleteDriver(user){
+  return this.http.post<any>(this.URL + '/delete-account', user);
+  
+}
+//fin conductor
+
+
   signUp(user){
     return this.http.post<any>(this.URL + '/signup', user);  
   }
@@ -132,31 +160,31 @@ deleteUserAdmin(correo){
   return this.http.post<any>(this.URL +'/delete-user-admin', correo);
 }
 uploadProfile(profile, id){
-console.log(this.URL + '/upload-profile-pic?id='+id);
+
     return this.http.post<any>(this.URL + '/upload-profile-pic?id='+id, profile);  
   }
 uploadLicencia(profile, id){
-  console.log(this.URL + '/upload-profile-licencia?id='+id);
+
     return this.http.post<any>(this.URL + '/upload-profile-licencia?id='+id, profile);  
     }
 uploadRevision(profile, id){
-  console.log(this.URL + '/upload-profile-revision?id='+id);
+ 
   return this.http.post<any>(this.URL + '/upload-profile-revision?id='+id, profile);  
 }
 uploadPlaca(profile, id){
-  console.log(this.URL + '/upload-profile-placa?id='+id);
+
   return this.http.post<any>(this.URL + '/upload-profile-placa?id='+id, profile);  
 }
 deleteDriveLicencia(id){
-  //console.log(this.URL + '/upload-profile-licencia?id='+id);
+  
   return this.http.get<any>(this.URL + '/delete-licencia?id='+id);  
   }
   deleteDriveRevision(id){
-    //console.log(this.URL + '/upload-profile-licencia?id='+id);
+  
     return this.http.get<any>(this.URL + '/delete-revision?id='+id);  
   }
   deleteDrivePlaca(id){
-    //console.log(this.URL + '/upload-profile-licencia?id='+id);
+    
     return this.http.get<any>(this.URL + '/delete-placa?id='+id);  
   }
 

@@ -3,6 +3,7 @@ const {Router}=require('express');
 const router = Router();
 
 const user = require('../models/usersModel');
+const driver = require('../models/driverModel');
 const jwt = require('jsonwebtoken');
 
 
@@ -30,6 +31,32 @@ router.post('/api/edit-profile', verifyToken, async (req, res) => {
     }
 });
 
+//Editar perfil conductor
+router.post('/api/edit-profile-driver', verifyToken, async (req, res) => {
+    const { telefono, direccion, facultad } = req.body;
+    let token = req.headers.authorization.split(' ')[1];
+    try {   
+        const Driver = await driver.findOne({token});
+        if(Driver.estado=='inactivo'){
+            return res.json({estado:'inactivo'});
+        }
+        
+        
+            email = Driver.email; 
+            if(await driver.updateOne({email},{$set:{telefono,direccion,facultad}})){
+            res.json({estado:'Hecho'});
+            }
+        else{
+            res.json({estado:'Fallo'});
+        }       
+    } catch (error) {
+        console.log('Error en el sistema');
+        res.json({estado:'Sistema', token});
+    }
+});
+
+
+//verificar token
 async function verifyToken(req, res, next) {
 	try {
 		if (!req.headers.authorization) {

@@ -73,16 +73,18 @@ export class ChangeRecPassComponent implements OnInit {
       return false;
     }
     this.user.contrasenaNueva1=this.changePassw.value.contrasenaNueva1;
-      this.user.contrasenaNueva2=this.changePassw.value.contrasenaNueva2;
+    this.user.contrasenaNueva2=this.changePassw.value.contrasenaNueva2;
     this.authservice.changeRecPass(this.user)
     .subscribe(
       res =>{ 
         if(res.estado=='password'){
           Swal.fire("Error", "No se pudo confirmar la contraseña, verifique que ambos campos sean iguales", "warning");
-        }else if(res.estado=='hecho'){
+        }else if(res.estado=='hecho' && res.type=='usuario'){
           Swal.fire("Completado", "Su contraseña fue actualizada con éxito", "success");
           this.router.navigate(['/profile']);
-  
+        }else if(res.estado=='hecho' && res.type=='driver'){
+          Swal.fire("Completado", "Su contraseña fue actualizada con éxito", "success");
+          this.router.navigate(['/profile-driver']);
         }else{
         Swal.fire("Error","Hubo un error en el sistema, favor intente de nuevo", "warning");
         }        

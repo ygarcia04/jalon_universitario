@@ -54,7 +54,7 @@ export class SigninComponent implements OnInit {
       res =>{ 
         //manejo de respuestas para ogin de usuario
         if(res.estado=='email'){
-          Swal.fire("Error", "Su correo no esta registrado", "warning");     
+          Swal.fire("Error", "Su correo o contraseña son erroneos, o no esta registrado", "warning");     
         }else if(res.estado=='password'&&res.type=='usuario'){
           Swal.fire("Error", "Correo o contraseña incorrectos", "warning");
         }else if(res.estado=='inactivo'&&res.type=='usuario'){

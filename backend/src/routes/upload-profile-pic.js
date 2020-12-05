@@ -76,35 +76,32 @@ router.post('/api/upload-profile-pic', upload.single('file'), async(req, res) =>
 
 
 
-
-
-
 router.get('/api/profile-pic', async (req, res) => {
 
 
-     let token = req.headers.authorization.split(' ')[1];
-        const User = await user.findOne({token});
-        if(User.estado=='inactivo'){
-            return res.json({estado:'inactivo'});
-        }
+    let token = req.headers.authorization.split(' ')[1];
+       const User = await user.findOne({token});
+       if(User.estado=='inactivo'){
+           return res.json({estado:'inactivo'});
+       }
 
-    const imageName = User.picPerfil; 
-    console.log(imageName);
+        const imageName = User.picPerfil; 
+        console.log(imageName);
 
-    const imagePath = path.join(__dirname, "../../upload", imageName);
-    console.log(imagePath);
+        const imagePath = path.join(__dirname, "../../upload", imageName);
+        console.log(imagePath);
 
-    res.sendFile(imagePath);
-
-
-
-    /*if (fs.existsSync(imagePath)) {
-
-        res.sendFile(imageName);
+        return res.sendFile(imagePath);
 
 
 
-    } else res.status(400).send('Error: Image does not exists');*/
+   /*if (fs.existsSync(imagePath)) {
+
+       res.sendFile(imageName);
+
+
+
+   } else res.status(400).send('Error: Image does not exists');*/
 
 });
 

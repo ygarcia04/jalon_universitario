@@ -23,6 +23,9 @@ import { UsersBloqComponent } from './components/users-bloq/users-bloq.component
 import { UsersActComponent } from './components/users-act/users-act.component';
 import { UsersInactComponent } from './components/users-inact/users-inact.component';
 import { SignupdriveComponent } from "./components/signupdrive/signupdrive.component";
+import { ProfileDriverComponent } from "./components/profile-driver/profile-driver.component";
+import { EditProfileDriverComponent } from "./components/edit-profile-driver/edit-profile-driver.component";
+import { DeleteDriverComponent } from "./components/delete-driver/delete-driver.component";
 
 const routes: Routes = [
 {
@@ -43,8 +46,18 @@ const routes: Routes = [
     component: VerificationLinkComponent
   },
   {
+    path: 'delete-user',
+      component: DeleteDriverComponent,
+      canActivate: [AuthGuard]
+  },
+  {
     path: 'signup-driver',
     component: SignupdriveComponent
+  },
+  {
+    path: 'edit-profile-driver',
+    component: EditProfileDriverComponent,
+    canActivate: [AuthGuard]
   },
   {
   path: 'resend-code',
@@ -76,6 +89,11 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'profile-driver',
+    component: ProfileDriverComponent,
     canActivate: [AuthGuard]
   },
   {

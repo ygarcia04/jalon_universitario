@@ -4,27 +4,41 @@ const router = Router();
 const { encrypt, decrypt } = require('./functions');
 
 const user = require('../models/usersModel');
+const driver = require('../models/driverModel');
 const jwt = require('jsonwebtoken');
 
 router.post('/api/verification', async (req, res) => {
         
     try { 
         const { codigo } = req.body;
-        let token = req.headers.authorization.split(' ')[1]
-        const User = await user.findOne({token});
-        console.log(User);
-        if(codigo==User.codigo){
-            email = User.email; 
-            await user.updateOne({email},{$set:{estado:"activo",codigo:""}});
-            res.json({estado:'Hecho', token});
-        }else{
-            res.json({estado:'Fallo', token});
-        }     
+        console.log(codigo);
+        let token = req.headers.authorization.split(' ')[1];
+        if(Driver = await driver.findOne({token})){
+            if(codigo==Driver.codigo){
+                email = Driver.email; 
+                await driver.updateOne({email},{$set:{estado:"activo",codigo:""}});
+                res.json({estado:'Hecho', token});
+            }else{
+                res.json({estado:'Fallo', token});
+            }  
+
+        }
+        if(User = await user.findOne({token})){
+            if(codigo==User.codigo){
+                email = User.email; 
+                await user.updateOne({email},{$set:{estado:"activo",codigo:""}});
+                res.json({estado:'Hecho', token});
+            }else{
+                res.json({estado:'Fallo', token});
+            }  
+
+        }
+   
           
           
     } catch (error) {
-        console.log('Error en el sistema');
-        res.json({estado:'Sistema', token});
+        console.log(error);
+        res.json({estado:'Sistema'});
     }
 });
 

@@ -3,6 +3,7 @@ const router = Router();
 const nodemailer = require('nodemailer');
 
 const user = require('../models/usersModel');
+const driver = require('../models/driverModel')
 const jwt = require('jsonwebtoken');
 const bcrypt = require ('bcrypt-nodejs');
 
@@ -21,8 +22,8 @@ router.post('/api/rec-password', async (req, res)=>{
     //equivale a escribir new user({email:email, password:password
           
           /*VERIFICANDO SI EXISTE YA UN CORREO EN LA BASE*/
-          if( UserR = await user.findOne({email:email_l})) {
-            if(UserR.estado=='inactivo'){
+          if(UserR = await user.findOne({email:email_l}) || (DriveR = await driver.findOne({email:email_l}))) {
+            if(UserR.estado=='inactivo' || DriveR.estado=='inactivo'){
                 return res.json({estado:'inactivo'});
             }
         
@@ -32,6 +33,7 @@ router.post('/api/rec-password', async (req, res)=>{
             const salt = bcrypt.genSaltSync();
             const hash= bcrypt.hashSync(tempPassword, salt);
             await user.updateOne({email:email_l},{$set:{temporal_pass:hash}});
+            await driver.updateOne({email:email_l},{$set:{temporal_pass:hash}});
             
             /*INICIO ENVIO DE CORREO */
             const transporter = nodemailer.createTransport({
@@ -49,7 +51,7 @@ router.post('/api/rec-password', async (req, res)=>{
             };
             transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
-                    return res.json({estado:'noEnvado'});
+                    return res.json({estado:'noEnviado'});
                 } else {
                     res.status(200).json({estado:'hecho'});
                 }

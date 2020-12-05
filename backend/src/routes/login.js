@@ -4,7 +4,7 @@ const router = Router();
 
 const user = require('../models/usersModel');
 const admin = require('../models/adminModels');
-const driver = require('../models/driveModel');
+const driver = require('../models/driverModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require ('bcrypt-nodejs');
 
@@ -17,8 +17,8 @@ router.post('/api/signin', async (req, res) => {
         const Admin = await admin.findOne({email:email_l});
         if (!Admin){
             //verificando usuario conductor
-            const Driver = await driver.findOne({email:email_l});
-            //comparando temporal pass
+            if(Driver = await driver.findOne({email:email_l})){
+                //comparando temporal pass
             if(Driver.temporal_pass!=""){
                 if(bcrypt.compareSync(password, Driver.temporal_pass)){
                     if(Driver.estado =='inactivo') {
@@ -79,12 +79,15 @@ router.post('/api/signin', async (req, res) => {
                 }
                 return res.json({estado:'password', type:'driver'});
             }
+                return res.json({estado:'email'});
 
+            }
+            
             //Fin usuario conductor
 
             //Verificacion si es usuario pasajero
-            const User = await user.findOne({email:email_l});
-            if (!User) return res.json({estado:'email'});
+            if(User = await user.findOne({email:email_l})){
+            //if (!User) return res.json({estado:'email'});
             //comparando temporal pass
             if(User.temporal_pass!=""){
                 if(bcrypt.compareSync(password, User.temporal_pass)){
@@ -146,13 +149,17 @@ router.post('/api/signin', async (req, res) => {
                 return res.json({estado:'password', type:'usuario'});
             }
             //Fin usuario pasajero
+            }
             
+            return res.json({estado:'email'});
         }else if(bcrypt.compareSync(password, Admin.password)){
+            
             const token = jwt.sign({_id: Admin._id}, 'secretkey');
             await admin.updateOne({email:email_l},{$set:{token:token}})
             return res.status(200).json({token:token, estado:"admin"});  
 
         }else{
+            console.log('No entro');
             return res.json({estado:'password' ,type:'usuario'});
         }       
 

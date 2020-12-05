@@ -2,7 +2,7 @@
 const {Router}=require('express');
 const router = Router();
 
-const drive = require('../models/driveModel');
+const drive = require('../models/driverModel');
 
 router.get('/api/delete-placa', async (req, res) => {
     const email = req.query.id;

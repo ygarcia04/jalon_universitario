@@ -127,10 +127,12 @@ export class SignupComponent implements OnInit {
           }else if(res.estado=='email'){
             Swal.fire("Error", "No se pudo enviar el correo", "warning");
             //this.router.navigate(['/signup']);
-          }else{
+          }else if(res.estado=='hecho'){
             localStorage.setItem('token', res.token);
-            Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu correo y a continuacion ingresa el codigo que recibiste", "success");
+            Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu bandeja de entrada en el correo institucional y sigue los pasos para activar tu cuenta", "success");
             this.router.navigate(['/verification']);
+          }else{
+            Swal.fire("Error", "Hubo un error en los datos ingresados, verifique cada uno de ellos!", "warning");
           }
           
         },

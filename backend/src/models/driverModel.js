@@ -1,6 +1,6 @@
 const {Schema, model} = require('mongoose');
 
-const driveSchema = new Schema({
+const driverSchema = new Schema({
     nombres: String,
     apellidos: String,
     email: String,
@@ -34,6 +34,6 @@ const driveSchema = new Schema({
 }, {
     timestamps: true
 });
-driveSchema.index({email:1},{unique:true});
+driverSchema.index({email:1},{unique:true});
 
-module.exports=model('drive', driveSchema);
+module.exports=model('driver', driverSchema);
