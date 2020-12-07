@@ -3,14 +3,14 @@ const path = require('path');
 const { unlink } = require('fs-extra');
 const router = Router();
 var multer = require("multer");
-const drive = require('../models/driveModel');
+const drive = require('../models/driverModel');
 
 var dirRevision='';
 var email = '';
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './revision')
+        cb(null, './upload/drivers/revision')
     },
     filename: function(req, file, cb) {
         //console.log (req.query.id)
@@ -49,7 +49,7 @@ router.post('/upload-profile-revision', revision.single('file'), async(req, res)
         // now you can store the file name in the db if you want for further reference.
         const Drive = await drive.findOne({email});
         
-        const perfilPath = path.join(__dirname, "../../revision", Drive.picRevision);
+        const perfilPath = path.join(__dirname, "../../upload/drivers/revision", Drive.picRevision);
             //console.log (perfilPath)
             //email = Conductor.email; 
             if(await drive.updateOne({email},{$set:{picRevision:dirRevision}})){
@@ -81,7 +81,7 @@ router.get('/profile-revision', async (req, res) => {
 
     const imageName = Drive.picRevision; 
     console.log(imageName);
-    const imagePath = path.join(__dirname, "../../revision", imageName);
+    const imagePath = path.join(__dirname, "../../upload/drivers/revision", imageName);
     console.log(imagePath);
 
     res.sendFile(imagePath);

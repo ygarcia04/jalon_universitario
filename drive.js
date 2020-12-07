@@ -1,28 +1,22 @@
-const {Router}=require('express');
+﻿const {Router}=require('express');
 const router = Router();
 const path = require('path');
 const nodemailer = require('nodemailer');
-const drive = require('../models/driveModel');
+const drive = require('../models/driverModel');
+const user = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require ('bcrypt-nodejs');
 const { encrypt, decrypt } = require('./functions');
 
 
-router.get('/api/', (req, res)=> res.send('Hello-World'));
 
 //La funcion debe ser async para poder usar await
 router.post('/signupd', async (req, res)=>{
     //guardar los valores de los datos recibidos en formato json
     const {nombres, apellidos, email, password, vpassword, numeroCuenta,
         identidad, direccion, facultad, fechaNacimiento, telefono, sexo,
-        /*intentos:Number,
-        token: String,
-        temporal_pass:String,
-        mesRegistro:Number,
-        anioRegistro:Number,*/
-        marca, modelo,
-        tipo, color, motor, anio}= req.body;
-
+        marca, modelo, tipo, color, motor, anio, placa}= req.body;
+        console.log(placa);
     //Creando el objeto usuario usando el modelo en drive.js
     if (password != vpassword){
         return res.json({estado:'password'})
@@ -44,6 +38,9 @@ router.post('/signupd', async (req, res)=>{
           }
           
           /*VERIFICANDO SI EXISTE YA UN CORREO EN LA BASE*/
+          if(User= await user.findOne({email:email_l})){
+            return res.json({estado: 'correo_repetido'});
+          }
           if( DriveR = await drive.findOne({email:email_l})) {
                 return res.json({estado: 'correo_repetido'});     
           } else {
@@ -60,38 +57,13 @@ router.post('/signupd', async (req, res)=>{
            mesRegistro=new Date().getMonth();
            anioRegistro=new Date().getFullYear();
             const newUser = new drive ({nombres, apellidos, email:email_l, password:hash, numeroCuenta, identidad,
-                codigo:codigoS, estado:"inactivo", direccion, facultad, fechaNacimiento, telefono, sexo, 
-                picPerfil:imageName, intentos:0, marca, modelo, tipo, color, motor, anio, placa: '', picLicencia: "", 
+                codigo:codigoS, estado:"verificarCorreo", direccion, facultad, fechaNacimiento, telefono, sexo, 
+                picPerfil:imageName, intentos:0, marca, modelo, tipo, color, motor, anio, placa, picLicencia: "", 
                 picRevision: "", picPlaca:"", token:"", temporal_pass:"",anioRegistro,mesRegistro});
             await newUser.save();
             const token = await jwt.sign({_id: newUser._id}, 'secretkey');
             await drive.updateOne({email:email_l},{$set:{token:token}});
-            const emailHash = encrypt(email_l);
-            const emailHash1=emailHash.iv;
-            const emailHash2=emailHash.content;
-
-            /*INICIO ENVIO DE CORREO */
-                const transporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    auth: {
-                    user: 'correop726@gmail.com',
-                    pass: 'Password.1234'
-                    }  
-                });
-                const mailOptions = {
-                    from: 'correop726@gmail.com',
-                    to: email_l,
-                    subject: 'Registro Jalón Universitario',
-                    html: "Gracias por unirse a Jalón Universitario<br> Posteriormente se le informará sobre la activación de su cuenta por este mismo medio </b>"
-                };
-                transporter.sendMail(mailOptions, function(error, info){
-                    if (error) {
-                        return res.json({estado:'email'});
-                    } else {
-                        res.status(200).json({token});
-                    }
-                });
-            /*FIN ENVIO DE CORREO*/         
+            return res.status(200).json({estado:'hecho'});      
           }
     
         }else{
@@ -101,7 +73,7 @@ router.post('/signupd', async (req, res)=>{
     });
 
     
-    router.get('/api/profile',verifyToken, async (req, res) => {
+    router.get('/profile',verifyToken, async (req, res) => {
         let token_l = req.headers.authorization.split(' ')[1];
         try {
             const User= await drive.findOne({token:token_l});
@@ -113,11 +85,13 @@ router.post('/signupd', async (req, res)=>{
         
     });
 
-    router.get('/api/user-state', async (req, res) => {
+    router.get('/user-state', async (req, res) => {
         let token_l = req.headers.authorization.split(' ')[1];
         try {
             const User= await drive.findOne({token:token_l});
-            if(User.estado=='inactivo'){
+            if(User.estado=='verificarCorreo'){
+                return res.json({estado:'verificarCorreo'});
+            }else if(User.estado=='inactivo'){
                 return res.json({estado:'inactivo'});
             }else{
                 return res.json({estado:'activo'})

@@ -97,7 +97,7 @@ export class SignupdriveComponent implements OnInit {
     let fileName=this.selectedFile.name.split(".").pop();
     console.log (fileName)
     if(fileName == null){
-        alert('No es jpeg');
+       // alert('No es jpeg');
         this.fdr=null;
         return false;
     }
@@ -110,6 +110,7 @@ createFormDatap(event) {
   this.selectedFile = <File>event.target.files[0];
   let fileName=this.selectedFile.name.split(".").pop();
   console.log (fileName)
+  console.log(this.selectedFile.size)
   if(fileName == null){
       alert('No es jpeg');
       this.fdp=null;
@@ -122,12 +123,15 @@ createFormDatap(event) {
   upload() {
     if(this.fd==null){
       alert('Debe ingresar una imagen de la licencia');
+      return false;
     }else{
     this.authService.uploadLicencia(this.fd,this.user.email)
     .subscribe( result => {
       if (result.estado == "error"){
         this.authService.deleteDriveLicencia(this.user.email).subscribe(res => {}, err => {});
         Swal.fire("Error", "Debe incluir una imagen de la licencia", "error");
+        //this.authService.deleteDriver(this.user.email).subscribe();
+        return false;
       }else{
         //Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu correo y a continuacion ingresa el codigo que recibiste", "success");
         this.uploadr();
@@ -135,7 +139,8 @@ createFormDatap(event) {
       
     },
     error=>{
-      alert('Error');
+      alertify.error('Error');
+      return false;
     });
 
     }     
@@ -145,12 +150,16 @@ createFormDatap(event) {
   uploadr() {
     if(this.fdr==null){
       alert('Debe ingresar una imagen de la revisión');
+      //this.authService.deleteDriver(this.user.email).subscribe();
+      return false;
     }else{
     this.authService.uploadRevision(this.fdr,this.user.email)
     .subscribe( result => {
       if (result.estado == "error"){
         this.authService.deleteDriveRevision(this.user.email).subscribe(res => {}, err => {});
         Swal.fire("Error", "Debe incluir una imagen de la revisión", "error");
+        //this.authService.deleteDriver(this.user.email).subscribe();
+        return false;
       }else{
         //Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu correo y a continuacion ingresa el codigo que recibiste", "success");
         this.uploadp();
@@ -158,7 +167,8 @@ createFormDatap(event) {
       
     },
     error=>{
-      alert('Error');
+      alertify.error('Error');
+      return false;
     });
 
     }     
@@ -167,20 +177,27 @@ createFormDatap(event) {
   //Placa
   uploadp() {
     if(this.fdp==null){
-      alert('Debe ingresar una imagen de su vehículo');
+      alertify.error('Debe ingresar una imagen de su vehículo');
+      //this.authService.deleteDriver(this.user.email).subscribe();
+      return false;
     }else{
     this.authService.uploadPlaca(this.fdp,this.user.email)
     .subscribe( result => {
       if (result.estado == "error"){
         this.authService.deleteDrivePlaca(this.user.email).subscribe(res => {}, err => {});
         Swal.fire("Error", "Debe incluir una imagen de su vehículo", "error");
+        //this.authService.deleteDriver(this.user.email).subscribe();
+        return false;
       }else{
-        Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu correo y a continuacion ingresa el codigo que recibiste", "success");
+        Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu correo para proceder con el registro", "success");
+        
+        this.router.navigate(['/verification']);
       }
       
     },
     error=>{
-      alert('Error');
+      alertify.error('Hubo un error');
+      return false;
     });
 
     }     
@@ -224,65 +241,90 @@ createFormDatap(event) {
     console.log(this.user);
     if(this.user.nombres==""){
       alertify.error('No puede dejar el nombre en blanco');
+      return false;
     }else if(this.user.apellidos==""){
       alertify.error('No puede dejar el apellido en blanco');
+      return false;
     }else if(this.user.email==""){
       alertify.error('No puede dejar el correo en blanco');
+      return false;
     }else if(this.user.password==""){
       alertify.error('No puede dejar la contraseña en blanco');
+      return false;
     }else if(this.user.vpassword==""){
       alertify.error('Se requiere verificar su contraseña');
+      return false;
     }else if(this.user.direccion==""){
       alertify.error('No puede dejar su dirección en blanco');
+      return false;
     }else if(this.user.numeroCuenta==""){
       alertify.error('No puede dejar el número de cuenta en blanco');
+      return false;
     }else if(this.user.identidad==""){
       alertify.error('No puede dejar el número de identidad en blanco'); 
+      return false;
     }else if(this.user.facultad==""){
       alertify.error('Debe seleccionar la facultad a la que pertenece');
+      return false;
     }else if(this.user.telefono==""){
       alertify.error('No puede dejar el número de teléfono en blanco');
+      return false;
     }else if(this.user.fechaNacimiento==""){
       alertify.error('Debe seleccionar su fecha de nacimiento');
+      return false;
     }else if(this.user.marca==""){
       alertify.error('No puede dejar la marca en blanco');
+      return false;
     }else if(this.user.modelo==""){
       alertify.error('No puede dejar el modelo en blanco');
+      return false;
     }else if(this.user.tipo==""){
       alertify.error('No puede dejar el tipo de vehículo en blanco');
+      return false;
     }else if(this.user.color==""){
       alertify.error('No puede dejar el color en blanco');
+      return false;
     }else if(this.user.motor==""){
       alertify.error('No puede dejar el tipo de motor en blanco');
+      return false;
     }else if(this.user.anio==""){
       alertify.error('No puede dejar el año del vehículo en blanco');
+      return false;
     }else if(this.user.placa==""){
       alertify.error('No puede dejar el número de placa en blanco');
+      return false;
     } else if(!this.user.numeroCuenta.match(/^[0-9]+$/)){
       alertify.error('El número de cuenta sólo debe incluir números');
+      return false;
     } else if(!this.user.identidad.match(/^[0-9]+$/)){
       alertify.error('El identidad sólo debe incluir números');
+      return false;
     }else if(!this.user.nombres.match(/^[a-z A-Z]+$/)){
       alertify.error('El nombre de usuario sólo debe incluir letras');
+      return false;
     }else if(!this.user.apellidos.match(/^[a-z A-Z]+$/)){
       alertify.error('El apellido de usuario sólo debe incluir letras');
+      return false;
     } else if(!this.user.telefono.match(/^[0-9]+$/)){
       alertify.error('El número de télefono sólo debe incluir números');
+      return false;
     }else{
       this.authService.signupdrive(this.user)
       .subscribe(
         res =>{
           if(res.estado=='correo'){
             Swal.fire("Error", "Debe usar un correo institucional de la UNAH", "warning");
-          this.router.navigate(['/signupdrive']);
+            return false;
           }else if(res.estado=='correo_repetido'){
             Swal.fire("Error", "Correo repetido", "warning");
+            return false;
             //this.router.navigate(['/signup']);
           /*}else if(res.estado=='password'){
             Swal.fire("Error", "Los campos de contraseña no coinciden", "warning");
             //this.router.navigate(['/signup']);*/
           }else if(res.estado=='email'){
             Swal.fire("Error", "No se pudo enviar el correo", "warning");
+            return false;
             //this.router.navigate(['/signup']);
           }else{
             localStorage.setItem('token', res.token);
@@ -295,7 +337,7 @@ createFormDatap(event) {
           //console.log(err);
           //this.router.navigate(['/signin']);
           Swal.fire("Error", "Hubo un error en el sistema, favor intente de nuevo!", "error");
-          this.router.navigate(['/signupdrive']);
+          this.router.navigate(['/signup-driver']);
         }
       )
     } 
