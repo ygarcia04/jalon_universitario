@@ -42,8 +42,11 @@ export class ProfileDriverComponent implements OnInit {
       .subscribe(
         res => {
           if(res.estado=='inactivo'){
+            this.router.navigate(['/home']);
+            Sawl.fire("Error", "Su cuenta debe estar activa para usar Jalón Universitario", "warning");
+          }else if(res.estado=='verificarCorreo'){
             this.router.navigate(['/verification']);
-            Sawl.fire("Error", "Debe verificar su usuario para usar Jalón Universitario", "warning");
+            Sawl.fire("Error", "Su cuenta de correo no ha sido verificada", "warning");
           }else{
             this.authService.getProfile()
             .subscribe(

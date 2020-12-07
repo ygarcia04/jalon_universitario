@@ -7,17 +7,19 @@ const user = require('../models/usersModel');
 const driver = require('../models/driverModel');
 const jwt = require('jsonwebtoken');
 
+var token_1 //Variable para traer el token del usuario conductor
+
 router.post('/api/verification', async (req, res) => {
-        
+     
     try { 
         const { codigo } = req.body;
-        console.log(codigo);
+        token_1 = await driver.findOne({token:token_1})
         let token = req.headers.authorization.split(' ')[1];
-        if(Driver = await driver.findOne({token})){
+        if(Driver = await driver.findOne({token_1})){  
             if(codigo==Driver.codigo){
                 email = Driver.email; 
-                await driver.updateOne({email},{$set:{estado:"activo",codigo:""}});
-                res.json({estado:'Hecho', token});
+                await driver.updateOne({email},{$set:{estado:"inactivo",codigo:""}});
+                res.json({estado:'Hecho', type:'driver', token});
             }else{
                 res.json({estado:'Fallo', token});
             }  
@@ -27,7 +29,7 @@ router.post('/api/verification', async (req, res) => {
             if(codigo==User.codigo){
                 email = User.email; 
                 await user.updateOne({email},{$set:{estado:"activo",codigo:""}});
-                res.json({estado:'Hecho', token});
+                res.json({estado:'Hecho', type:'usuario', token});
             }else{
                 res.json({estado:'Fallo', token});
             }  
@@ -53,11 +55,20 @@ router.get('/api/verification', async (req, res) => {
             content: userContent
         }
         const dec_email = decrypt(hash);
-        if(User= await user.findOne({email:dec_email})){
+        if(User= await driver.findOne({email:dec_email})){
+            if(code==User.codigo){
+                const token = jwt.sign({_id: User._id}, 'secretkey');
+                await driver.updateOne({email:dec_email},{$set:{estado:"inactivo",codigo:"",token}});
+                res.json({estado:'Hecho', type:'driver', token});
+            }else{
+                res.json({estado:'codigo'});
+            }
+
+        }else if(User= await user.findOne({email:dec_email})){
             if(code==User.codigo){
                 const token = jwt.sign({_id: User._id}, 'secretkey');
                 await user.updateOne({email:dec_email},{$set:{estado:"activo",codigo:"",token}});
-                res.json({estado:'Hecho', token});
+                res.json({estado:'Hecho', type:'usuario', token});
             }else{
                 res.json({estado:'codigo'});
             }
@@ -71,9 +82,5 @@ router.get('/api/verification', async (req, res) => {
         res.json({estado:'Sistema'});
     }
 });
-
-
-
-
 
 module.exports = router;

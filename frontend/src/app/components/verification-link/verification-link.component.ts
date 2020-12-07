@@ -25,10 +25,14 @@ export class VerificationLinkComponent implements OnInit {
             this.authService.getVerificationCode(userMail,code,userMail2)
           .subscribe(
             res=>{
-              if(res.estado=='Hecho'){
+              if(res.estado=='Hecho' && res.type=='usuario'){
                 Swal.fire("Cuenta Verificada", "Gracias por registrarse con nosotros", "success");
                 localStorage.setItem('token', res.token);
                 this.router.navigate(['/profile']);
+              }else if(res.estado=='Hecho' && res.type=='driver'){
+                Swal.fire("Cuenta Verificada", "Gracias por registrarse con nosotros", "success");
+                localStorage.setItem('token', res.token);
+                this.router.navigate(['/home']);
               }else{
                 Swal.fire("Error", "Link erroneo, no se encontró el usuario, intente verificar manualmente su cuenta entrando al sistema", "warning");
                   this.router.navigate(['/signin']);

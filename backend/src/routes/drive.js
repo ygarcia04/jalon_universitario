@@ -57,39 +57,13 @@ router.post('/api/signupd', async (req, res)=>{
            mesRegistro=new Date().getMonth();
            anioRegistro=new Date().getFullYear();
             const newUser = new drive ({nombres, apellidos, email:email_l, password:hash, numeroCuenta, identidad,
-                codigo:codigoS, estado:"inactivo", direccion, facultad, fechaNacimiento, telefono, sexo, 
+                codigo:codigoS, estado:"verificarCorreo", direccion, facultad, fechaNacimiento, telefono, sexo, 
                 picPerfil:imageName, intentos:0, marca, modelo, tipo, color, motor, anio, placa, picLicencia: "", 
                 picRevision: "", picPlaca:"", token:"", temporal_pass:"",anioRegistro,mesRegistro});
             await newUser.save();
             const token = await jwt.sign({_id: newUser._id}, 'secretkey');
             await drive.updateOne({email:email_l},{$set:{token:token}});
-            return res.status(200).json({estado:'hecho'});
-            /*const emailHash = encrypt(email_l);
-            const emailHash1=emailHash.iv;
-            const emailHash2=emailHash.content;
-
-            /*INICIO ENVIO DE CORREO */
-                /*const transporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    auth: {
-                    user: 'correop726@gmail.com',
-                    pass: 'Password.1234'
-                    }  
-                });
-                const mailOptions = {
-                    from: 'correop726@gmail.com',
-                    to: email_l,
-                    subject: 'Registro Jalón Universitario',
-                    html: "Gracias por unirse a Jalón Universitario<br><br>Posteriormente se le informará sobre la activación de su cuenta por este mismo medio.</b></b>"
-                };
-                transporter.sendMail(mailOptions, function(error, info){
-                    if (error) {
-                        return res.json({estado:'email'});
-                    } else {
-                        return res.status(200).json({estado:'hecho'});
-                    }
-                });*/
-            /*FIN ENVIO DE CORREO*/         
+            return res.status(200).json({estado:'hecho'});         
           }
     
         }else{
@@ -115,7 +89,9 @@ router.post('/api/signupd', async (req, res)=>{
         let token_l = req.headers.authorization.split(' ')[1];
         try {
             const User= await drive.findOne({token:token_l});
-            if(User.estado=='inactivo'){
+            if(User.estado=='verificarCorreo'){
+                return res.json({estado:'verificarCorreo'});
+            }else if(User.estado=='inactivo'){
                 return res.json({estado:'inactivo'});
             }else{
                 return res.json({estado:'activo'})

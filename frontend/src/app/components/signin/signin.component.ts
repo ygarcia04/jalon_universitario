@@ -54,7 +54,7 @@ export class SigninComponent implements OnInit {
       res =>{ 
         //manejo de respuestas para ogin de usuario
         if(res.estado=='email'){
-          Swal.fire("Error", "Su correo o contraseña son erroneos, o no esta registrado", "warning");     
+          Swal.fire("Error", "Su correo no esta registrado", "warning");     
         }else if(res.estado=='password'&&res.type=='usuario'){
           Swal.fire("Error", "Correo o contraseña incorrectos", "warning");
         }else if(res.estado=='inactivo'&&res.type=='usuario'){
@@ -87,9 +87,13 @@ export class SigninComponent implements OnInit {
           this.router.navigate(['/profile-driver']);
           }else if(res.estado=='password'&&res.type=='driver'){
             Swal.fire("Error", "Correo o contraseña incorrectos", "warning");
-          }else if(res.estado=='inactivo'&&res.type=='driver'){
+          }else if(res.estado=='inactivo'&& res.type=='driver'){
             localStorage.setItem('driver', res.token);
-            Swal.fire("Inactivo", "Su usuario esta inactivo, debe activarlo para ingresar", "warning");
+            Swal.fire("Inactivo", "Se le informará vía correo electrónico una vez haya sido activada su cuenta", "warning");
+            this.router.navigate(['/signin']);
+          }else if(res.estado=='verificarCorreo' && res.type=='driver'){
+            localStorage.setItem('driver', res.token);
+            Swal.fire("Correo no verificado", "Proceda a verificarlo para continuar con el proceso de activación de la cuenta", "warning");
             this.router.navigate(['/verification']);
           }else if(res.estado=='bloqueado'&&res.type=='driver'){     
             Swal.fire("Usuario Bloqueado", "Su usuario ha sido bloqueado por intentos de inicio fallidos, podrá recuperar su cuenta, confirmando su correo", "warning");

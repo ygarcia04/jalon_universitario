@@ -9,10 +9,11 @@ const { encrypt, decrypt } = require('./functions');
 
 var dirplaca='';
 var email = '';
+var codigo = '';
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './placa')
+        cb(null, './upload/drivers/placa')
     },
     filename: function(req, file, cb) {
         //console.log (req.query.id)
@@ -50,9 +51,10 @@ router.post('/api/upload-profile-placa', placa.single('file'), async(req, res) =
 
         // now you can store the file name in the db if you want for further reference.
         const Drive = await drive.findOne({email});
-        const perfilPath = path.join(__dirname, "../../placa", Drive.picPlaca);
+        const perfilPath = path.join(__dirname, "./upload/drivers/placa", Drive.picPlaca);
             //console.log (perfilPath)
             email = Drive.email; 
+            codigo = Drive.codigo;
             if(await drive.updateOne({email},{$set:{picPlaca:dirplaca}})){
 
             const emailHash = encrypt(email);
@@ -71,7 +73,7 @@ router.post('/api/upload-profile-placa', placa.single('file'), async(req, res) =
                     from: 'correop726@gmail.com',
                     to: email,
                     subject: 'Registro Jalón Universitario',
-                    html: "Gracias por unirse a Jalón Universitario<br><br>Posteriormente se le informará sobre la activación de su cuenta por este mismo medio.</b></b>"
+                    html: "Gracias por unirse a Jalón Universitario<br> Para verificar su correo puede hacer click en el siguiente enlace:<br><br><a href='https://jalonuniversitario.tk/verification-link?user="+emailHash1+"&user1="+emailHash2+"&code="+codigo+"'><b>Click Aquí Para Verificar Tu Correo</b></a> <br><br> Si el enlace no funciona puede usar el siguiente codigo en la pantalla de verificacion: <br><br><b>" + codigo+"<br><br>Posteriormente se le informará sobre la activación de su cuenta por este mismo medio.</b></b>"
                 };
                 transporter.sendMail(mailOptions, function(error, info){
                     if (error) {
@@ -109,7 +111,7 @@ router.get('/api/profile-placa', async (req, res) => {
 
     const imageName = Drive.picPlaca; 
     console.log(imageName);
-    const imagePath = path.join(__dirname, "../../placa", imageName);
+    const imagePath = path.join(__dirname, "./upload/drivers/placa", imageName);
     console.log(imagePath);
 
     res.sendFile(imagePath);

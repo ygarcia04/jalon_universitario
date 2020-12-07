@@ -111,6 +111,18 @@ export class SignupComponent implements OnInit {
       alertify.error('No puede dejar el número de teléfono en blanco');
     }else if(this.user.fechaNacimiento==""){
       alertify.error('Debe seleccionar su fecha de nacimiento');
+    } else if(!this.user.numeroCuenta.match(/^[0-9]+$/)){
+      alertify.error('El número de cuenta sólo debe incluir números');
+      return false;
+    }else if(!this.user.nombres.match(/^[a-z A-Z]+$/)){
+      alertify.error('El nombre de usuario sólo debe incluir letras');
+      return false;
+    }else if(!this.user.apellidos.match(/^[a-z A-Z]+$/)){
+      alertify.error('El apellido de usuario sólo debe incluir letras');
+      return false;
+    } else if(!this.user.telefono.match(/^[0-9]+$/)){
+      alertify.error('El número de télefono sólo debe incluir números');
+      return false;
     }else{
       this.authService.signUp(this.user)
       .subscribe(

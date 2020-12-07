@@ -190,7 +190,7 @@ createFormDatap(event) {
         return false;
       }else{
         Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu correo para proceder con el registro", "success");
-        this.router.navigate(['/home']);
+        this.router.navigate(['/verification']);
       }
       
     },
@@ -326,7 +326,7 @@ createFormDatap(event) {
             return false;
             //this.router.navigate(['/signup']);
           }else{
-            //localStorage.setItem('token', res.token);
+            localStorage.setItem('token', res.token);
             //Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu correo y a continuacion ingresa el codigo que recibiste", "success");
             this.upload()
           }

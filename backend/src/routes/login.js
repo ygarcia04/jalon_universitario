@@ -65,6 +65,11 @@ router.post('/api/signin', async (req, res) => {
                     console.log(token);
                     await driver.updateOne({email:email_l},{$set:{intentos:0}})
                     return res.status(200).json({estado:'inactivo',token:token, type:'driver'});
+                }else if(Driver.estado =='verificarCorreo') {
+                    const token = Driver.token;
+                    console.log(token);
+                    await driver.updateOne({email:email_l},{$set:{intentos:0}})
+                    return res.status(200).json({estado:'verificarCorreo', token:token, type:'driver'});
                 }else{
                     const token = Driver.token;
                     await driver.updateOne({email:email_l},{$set:{intentos:0}})

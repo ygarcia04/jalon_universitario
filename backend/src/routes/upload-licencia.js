@@ -10,7 +10,7 @@ var email = '';
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './licencia')
+        cb(null, './upload/drivers/licencia')
     },
     filename: function(req, file, cb) {
         //console.log (req.query.id)
@@ -49,7 +49,7 @@ router.post('/api/upload-profile-licencia', licencia.single('file'), async(req, 
         // now you can store the file name in the db if you want for further reference.
         const Drive = await drive.findOne({email});
         
-        const perfilPath = path.join(__dirname, "../../licencia", Drive.picLicencia);
+        const perfilPath = path.join(__dirname, "./upload/drivers/licencia", Drive.picLicencia);
             //console.log (perfilPath)
             //email = Conductor.email; 
             if(await drive.updateOne({email},{$set:{picLicencia:dirlicencia}})){
@@ -81,7 +81,7 @@ router.get('/api/profile-licencia', async (req, res) => {
 
     const imageName = Drive.picLicencia; 
     console.log(imageName);
-    const imagePath = path.join(__dirname, "../../licencia", imageName);
+    const imagePath = path.join(__dirname, "./upload/drivers/licencia", imageName);
     console.log(imagePath);
 
     res.sendFile(imagePath);
