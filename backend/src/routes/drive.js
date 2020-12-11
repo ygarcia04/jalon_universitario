@@ -27,10 +27,7 @@ router.post('/api/signupd', async (req, res)=>{
     /*Revisar si cumple con @unah.hn*/
     //var reg = /\*(@unah.hn)/;
     if(email_l.match(/@unah.hn$/)){
-        
-    
     //equivale a escribir new user({email:email, password:password})
- 
         //creando codigo de validacion
         function getRandomInt(min, max) {
             result = Math.floor(Math.random() * (max - min)) + min;
@@ -79,6 +76,7 @@ router.post('/api/signupd', async (req, res)=>{
             const User= await drive.findOne({token:token_l});
             return res.json({User});
         } catch (error) {
+            console.log(error)
             res.json({estado:'error', token_l});
             
         }
@@ -97,6 +95,7 @@ router.post('/api/signupd', async (req, res)=>{
                 return res.json({estado:'activo'})
             }
         } catch (error) {
+            console.log(error)
             res.json({estado:'error'});
             
         }
@@ -122,6 +121,7 @@ router.post('/api/signupd', async (req, res)=>{
             next();
         } catch(e) {
             //console.log(e)
+            console.log(error)
             return res.status(401).send('Unauhtorized Request');
         }
     }
