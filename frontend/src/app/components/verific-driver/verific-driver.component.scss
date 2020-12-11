@@ -1,0 +1,92 @@
+.emp-driver{
+    padding: 3%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    border-radius: 0.5rem;
+    background: #fff;
+}
+.driver-img{
+    text-align: center;
+}
+.driver-img img{
+    width: 70%;
+    height: 100%;
+}
+.driver-img .file {
+    position: relative;
+    overflow: hidden;
+    margin-top: -20%;
+    width: 70%;
+    border: none;
+    border-radius: 0;
+    font-size: 15px;
+    background: #212529b8;
+}
+.driver-img .file input {
+    position: absolute;
+    opacity: 0;
+    right: 0;
+    top: 0;
+}
+.driver-head h5{
+    color: #333;
+}
+.driver-head h6{
+    color: #0062cc;
+}
+.driver-edit-btn{
+    border: none;
+    border-radius: 1.5rem;
+    width: 70%;
+    padding: 2%;
+    font-weight: 600;
+    color: #6c757d;
+    cursor: pointer;
+}
+.proile-rating{
+    font-size: 12px;
+    color: #818182;
+    margin-top: 5%;
+}
+.proile-rating span{
+    color: #495057;
+    font-size: 15px;
+    font-weight: 600;
+}
+.driver-head .nav-tabs{
+    margin-bottom:5%;
+}
+.driver-head .nav-tabs .nav-link{
+    font-weight:600;
+    border: none;
+}
+.driver-head .nav-tabs .nav-link.active{
+    border: none;
+    border-bottom:2px solid #0062cc;
+}
+.driver-work{
+    padding: 14%;
+    margin-top: -15%;
+}
+.driver-work p{
+    font-size: 12px;
+    color: #818182;
+    font-weight: 600;
+    margin-top: 10%;
+}
+.driver-work a{
+    text-decoration: none;
+    color: #495057;
+    font-weight: 600;
+    font-size: 14px;
+}
+.driver-work ul{
+    list-style: none;
+}
+.driver-tab label{
+    font-weight: 600;
+}
+.driver-tab p{
+    font-weight: 600;
+    color: #0062cc;
+}
