@@ -52,14 +52,14 @@ export class RutasComponent implements OnInit {
       alertify.error('No puede dejar el tipo de destino en blanco');
       return false
     }else if(this.user.ruta==""){
-      alertify.error('No puede dejar la colonia en blanco');
+      alertify.error('No puede dejar la ruta en blanco');
       return false
     }else if(!this.user.hora.match(/(\d{2})\:(\d{2})/)){
       alertify.error('Favor use el formato de 24 horas HH:mm');
       return false
     }else {
       Swal.fire({​​
-        title: "Seguro que desea guardar la colonia?",
+        title: "Seguro que desea guardar la ruta?",
         icon: 'question',
         showDenyButton: true,
         confirmButtonText: 'Continuar',
@@ -71,12 +71,12 @@ export class RutasComponent implements OnInit {
         .subscribe (
           res=>{
             if(res.estado=='hecho'){
-              Swal.fire("Exitoso", "Se ha almacenado la colonia correctamente", "success");
+              Swal.fire("Exitoso", "Se ha almacenado la ruta correctamente", "success");
               this.router.navigate(['/profile-driver']);
             }else if(res.estado=='repetido'){
-              Swal.fire("Petición Repetida", "La colonia ya ha sido guardado", "warning");   
+              Swal.fire("Petición Repetida", "La ruta ya ha sido guardada", "warning");   
             }else {
-              Swal.fire("Error", "No se pudo almacenar la colonia, intentelo de nuevo", "warning");          
+              Swal.fire("Error", "No se pudo almacenar la ruta, intentelo de nuevo", "warning");          
             }
           }​​,
           err=>{​​

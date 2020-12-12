@@ -39,11 +39,11 @@ export class VerificationComponent implements OnInit {
             this.router.navigate(['/verification']);
             console.log(res.token);
           }else if(res.estado=='Hecho' && res.type=='driver'){
-            Swal.fire("Cuenta Verificada", "Gracias por registrarse con nosotros, se le informará a su correo cuando su cuenta sea verificada", "success");
+            Swal.fire("Cuenta Verificada", "Gracias por registrarse con nosotros, se le informará a su correo cuando su cuenta sea activada", "success");
             this.authService.logoutDriver();
             this.router.navigate(['/home']);
           }else if(res.estado=='Hecho' && res.type=='usuario'){
-            Swal.fire("Cuenta Verificada", "Gracias por registrarse con nosotros, se le informará a su correo cuando su cuenta sea verificada", "success");
+            Swal.fire("Cuenta Verificada", "Gracias por registrarse con nosotros, su cuenta ha sido activada", "success");
             this.router.navigate(['/profile']);
           }else{
           Swal.fire("Email Sin Verificar", "Hubo un error con el código", "warning");
@@ -53,11 +53,9 @@ export class VerificationComponent implements OnInit {
         err =>{
           if (err instanceof HttpErrorResponse) {
             if (err.status === 401) {
-              console.log('Hola');
               this.router.navigate(['/signin']);
             }
           }else{
-          //this.router.navigate(['/signin']);
           Swal.fire("Error", "El codigo no coincide con el enviado a su correo", "warning");
           this.router.navigate(['/verification']);
           }

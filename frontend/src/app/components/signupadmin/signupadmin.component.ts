@@ -26,7 +26,6 @@ export class SignupadminComponent implements OnInit {
   }
 
   signupa(){
-    console.log('noefnoeife')
     this.authService.signupa(this.user)
     .subscribe( 
       res => {console.log (res)},

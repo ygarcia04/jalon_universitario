@@ -176,7 +176,7 @@ constructor(
         if(res.estado=='usuario'){
           Swal.fire("Error", "Hubo un error al intentar aceptar, intente de nuevo", "warning");
         }else{ 
-          Swal.fire("Aceptado", "Usted ha aceptado el jalon solicitado, se le ha enviado una notificacion a su correo y al del pasajero", "success")
+          Swal.fire("Aceptado", "Usted ha aceptado el jalón solicitado, se le ha enviado una notificación a su correo y al del pasajero", "success")
           .then((avanzar)=>{
             location.reload();
           })

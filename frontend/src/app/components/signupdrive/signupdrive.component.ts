@@ -97,7 +97,7 @@ export class SignupdriveComponent implements OnInit {
     let fileName=this.selectedFile.name.split(".").pop();
     console.log (fileName)
     if(fileName == null){
-       // alert('No es jpeg');
+        alert('No es jpeg');
         this.fdr=null;
         return false;
     }
@@ -130,10 +130,8 @@ createFormDatap(event) {
       if (result.estado == "error"){
         this.authService.deleteDriveLicencia(this.user.email).subscribe(res => {}, err => {});
         Swal.fire("Error", "Debe incluir una imagen de la licencia", "error");
-        //this.authService.deleteDriver(this.user.email).subscribe();
         return false;
       }else{
-        //Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu correo y a continuacion ingresa el codigo que recibiste", "success");
         this.uploadr();
       }
       
@@ -150,7 +148,6 @@ createFormDatap(event) {
   uploadr() {
     if(this.fdr==null){
       alert('Debe ingresar una imagen de la revisión');
-      //this.authService.deleteDriver(this.user.email).subscribe();
       return false;
     }else{
     this.authService.uploadRevision(this.fdr,this.user.email)
@@ -158,10 +155,8 @@ createFormDatap(event) {
       if (result.estado == "error"){
         this.authService.deleteDriveRevision(this.user.email).subscribe(res => {}, err => {});
         Swal.fire("Error", "Debe incluir una imagen de la revisión", "error");
-        //this.authService.deleteDriver(this.user.email).subscribe();
         return false;
       }else{
-        //Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu correo y a continuacion ingresa el codigo que recibiste", "success");
         this.uploadp();
       }
       
@@ -178,7 +173,6 @@ createFormDatap(event) {
   uploadp() {
     if(this.fdp==null){
       alertify.error('Debe ingresar una imagen de su vehículo');
-      //this.authService.deleteDriver(this.user.email).subscribe();
       return false;
     }else{
     this.authService.uploadPlaca(this.fdp,this.user.email)
@@ -186,10 +180,9 @@ createFormDatap(event) {
       if (result.estado == "error"){
         this.authService.deleteDrivePlaca(this.user.email).subscribe(res => {}, err => {});
         Swal.fire("Error", "Debe incluir una imagen de su vehículo", "error");
-        //this.authService.deleteDriver(this.user.email).subscribe();
         return false;
       }else{
-        Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu correo e ingrea el código que recibiste o usa el enlace para verificar tu correo", "success");
+        Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu correo e ingresa el código que recibiste o usa el enlace para verificar tu correo", "success");
         this.router.navigate(['/verification']);
       }
       
@@ -317,38 +310,36 @@ createFormDatap(event) {
           }else if(res.estado=='correo_repetido'){
             Swal.fire("Error", "Correo repetido", "warning");
             return false;
-            //this.router.navigate(['/signup']);
-          /*}else if(res.estado=='password'){
+          }else if(res.estado=='password'){
             Swal.fire("Error", "Los campos de contraseña no coinciden", "warning");
-            //this.router.navigate(['/signup']);*/
+            return false;
           }else if(res.estado=='email'){
             Swal.fire("Error", "No se pudo enviar el correo", "warning");
             return false;
-            //this.router.navigate(['/signup']);
           }else{
             localStorage.setItem('driver', res.token);
-            //Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu correo y a continuacion ingresa el codigo que recibiste", "success");
             this.upload()
           }
           
         },
         err =>{
-          //console.log(err);
-          //this.router.navigate(['/signin']);
           Swal.fire("Error", "Hubo un error en el sistema, favor intente de nuevo!", "error");
           this.router.navigate(['/signupdrive']);
         }
       )
     } 
   }
+
   //Licencia
   getImage(): Observable<SafeResourceUrl> {
     return  this.authService.getProfileLicencia();
   }
+
   //Revision
   getImager(): Observable<SafeResourceUrl> {
     return  this.authService.getProfileRevision();
   }
+  
   //Placa
   getImagep(): Observable<SafeResourceUrl> {
     return  this.authService.getProfilePlaca();

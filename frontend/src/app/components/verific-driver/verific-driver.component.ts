@@ -72,7 +72,7 @@ export class VerificDriverComponent implements OnInit {
           this.email.email=userMail
           this.authService.getDriver(this.email)
           .subscribe(
-            res => {//console.log(res.User.nombres);
+            res => {
               this.driver=res.Driver;
               console.log(this.driver.email);
               let currDate = new Date();

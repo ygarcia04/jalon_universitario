@@ -30,7 +30,7 @@ export class VerificationLinkComponent implements OnInit {
                 localStorage.setItem('token', res.token);
                 this.router.navigate(['/profile']);
               }else if(res.estado=='Hecho' && res.type=='driver'){
-                Swal.fire("Cuenta Verificada", "Gracias por registrarse con nosotros", "success");
+                Swal.fire("Cuenta Verificada", "Gracias por registrarse con nosotros, se le informará a su correo cuando su cuenta sea activada", "success");
                 this.authService.logoutDriver();
                 this.router.navigate(['/home']);
               }else{

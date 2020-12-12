@@ -49,7 +49,7 @@ constructor(
       res => {
         if(res.estado=='inactivo'){
           this.router.navigate(['/verification']);
-          Swal.fire("Error", "Debe verificar su usuario para usar Jalón Universitario", "warning");
+          Swal.fire("Error", "Su cuenta debe estar activada para usar Jalón Universitario", "warning");
         }    
       },
       err => {

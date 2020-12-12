@@ -52,7 +52,7 @@ export class SigninComponent implements OnInit {
     this.authservice.signIn(this.user)
     .subscribe(
       res =>{ 
-        //manejo de respuestas para ogin de usuario
+        //manejo de respuestas para login de usuario
         if(res.estado=='email'){
           Swal.fire("Error", "Su correo no esta registrado", "warning");     
         }else if(res.estado=='password'&&res.type=='usuario'){
@@ -74,14 +74,12 @@ export class SigninComponent implements OnInit {
           Swal.fire("Bienvenido","", "success");
           this.router.navigate(['/admin']);
         }else if(res.estado=='hecho'&& res.type=='usuario'){
-        console.log(res.token);
         localStorage.setItem('token', res.token);
         Swal.fire("Bienvenido","", "success");
         this.router.navigate(['/profile']);
         }
         //usuario conductor
         else if(res.estado=='hecho'&& res.type=='driver'){
-          console.log(res.token);
           localStorage.setItem('driver', res.token);
           Swal.fire("Bienvenido","", "success");
           this.router.navigate(['/profile-driver']);
@@ -106,7 +104,6 @@ export class SigninComponent implements OnInit {
         }        
       },
       err =>{
-        //this.router.navigate(['/signin']);
         Swal.fire("Error", "Hubo un error en el sistema intente de nuevo", "warning");
         
       }

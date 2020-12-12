@@ -1,4 +1,5 @@
 
+
 const {Router}=require('express');
 const router = Router();
 
@@ -172,7 +173,36 @@ router.post('/api/rechazar-jalon', async (req, res) => {
         console.log(req.body);
         const jalon = await pedirJalon.find({id});
         await pedirJalon.updateOne({_id:id},{$set:{estadoSolicitud:'rechazado'}});
+        correopasajero = jalon.emailpasajero
+        conductor=jalon.nombresconductor+' '+jalon.apellidosconductor;
+        rutaConductor = jalon.ruta;
+        hora = jalon.horaSalida;
+
+         /*INICIO ENVIO DE CORREO PARA CONDUCTOR */
+         /*const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+            user: 'correop726@gmail.com',
+            pass: 'Password.1234'
+            }  
+        });
+        const mailOptions3 = {
+            from: 'correop726@gmail.com',
+            to: correopasajero,
+            subject: 'Rechazo de jalón',
+            html: "El usuario "+conductor+" a rechazado su petición de jalón para la ruta "+rutaConductor+" a las "+hora+"</b>"
+        };
+        transporter.sendMail(mailOptions3, function(error, info){
+            if (error) {
+                return res.json({estado:'email'});
+            } else {
+                
+                return res.status(200).json({estado:'hecho', token});
+            }
+        });*/
+    /*FIN ENVIO DE CORREO*/ 
         return res.json({estado:'hecho'});
+
     }catch(error){
         console.log(error)
         res.json({estado:'Error'});

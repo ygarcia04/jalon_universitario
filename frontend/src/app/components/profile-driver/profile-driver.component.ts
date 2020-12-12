@@ -50,7 +50,7 @@ export class ProfileDriverComponent implements OnInit {
           }else{
             this.authService.getProfile()
             .subscribe(
-              res => {//console.log(res.User.nombres);
+              res => {
                 this.profile=res.Driver;
                 let currDate = new Date();
                 this.profile.edad= this.getEdad(this.profile.fechaNacimiento);       

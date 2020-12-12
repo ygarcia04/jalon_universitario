@@ -6,11 +6,13 @@ import { AuthService } from "../../services/auth.service";
 import { Router } from "@angular/router";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import * as alertify from 'alertifyjs';
+
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
+
 export class SignupComponent implements OnInit {
 
   signup: FormGroup = new FormGroup({
@@ -129,16 +131,16 @@ export class SignupComponent implements OnInit {
         res =>{
           if(res.estado=='correo'){
             Swal.fire("Error", "Debe usar un correo institucional de la UNAH", "warning");
-          this.router.navigate(['/signup']);
+            return false;
           }else if(res.estado=='correo_repetido'){
             Swal.fire("Error", "Correo repetido", "warning");
-            //this.router.navigate(['/signup']);
+            return false;
           }else if(res.estado=='password'){
             Swal.fire("Error", "Los campos de contraseña no coinciden", "warning");
-            //this.router.navigate(['/signup']);
+            return false;
           }else if(res.estado=='email'){
             Swal.fire("Error", "No se pudo enviar el correo", "warning");
-            //this.router.navigate(['/signup']);
+            return false;
           }else if(res.estado=='hecho'){
             localStorage.setItem('token', res.token);
             Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu bandeja de entrada en el correo institucional y sigue los pasos para activar tu cuenta", "success");
@@ -149,8 +151,6 @@ export class SignupComponent implements OnInit {
           
         },
         err =>{
-          //console.log(err);
-          //this.router.navigate(['/signin']);
           Swal.fire("Error", "Hubo un error en el sistema, favor intente de nuevo!", "error");
           this.router.navigate(['/signup']);
         }
