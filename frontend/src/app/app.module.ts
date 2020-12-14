@@ -50,6 +50,7 @@ import { VerificDriverComponent } from './components/verific-driver/verific-driv
 import { RutasComponent } from './components/rutas/rutas.component';
 import { JalonesDriverComponent } from './components/jalones-driver/jalones-driver.component';
 import { JalonesPendientesDriverComponent } from './components/jalones-pendientes-driver/jalones-pendientes-driver.component';
+import { ViewRoutesComponent } from './components/view-routes/view-routes.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,8 @@ import { JalonesPendientesDriverComponent } from './components/jalones-pendiente
     VerificDriverComponent,
     RutasComponent,
     JalonesDriverComponent,
-    JalonesPendientesDriverComponent
+    JalonesPendientesDriverComponent,
+    ViewRoutesComponent
   ],
   imports: [
     BrowserModule,

@@ -72,14 +72,13 @@ constructor(
       res=>{
         //Guardando el numero de elementos de la consulta hecha
         this.docs=res.User;
-        console.log(this.docs);
         //Guardando todos los elementos de la consulta hecha en users
         this.users=res.usuario;
         //Llamado a la funcion que llena los elementos a mostrar en la tabla
         this.fillItems(this.docs);
         
       },
-      err=>{console.log(err)}
+      err=>{console.log('Error')}
     );
     }  
   }
@@ -105,7 +104,6 @@ constructor(
   }
     this.mdbTable.setDataSource(this.elements);
     this.previous = this.mdbTable.getDataSource();
-    console.log(this.elements)
   }
   
   searchItems() {
@@ -137,42 +135,6 @@ constructor(
     var date = new Date(fecha);
     var opciones={ year: 'numeric', month:'long', day:'numeric'};
     return date.toLocaleString('es-MX', opciones);
-  
-  }
-  eliminar(correo){
-    console.log(correo);
-    Swal.fire({
-      title: "Seguro que quiere eliminar esta cuenta?",
-      icon: 'question',
-      showDenyButton: true,
-      confirmButtonText: 'Continuar',
-      denyButtonText: 'Cancelar',
-    })
-    .then((Delete)=>{
-      if(Delete.isConfirmed){
-        this.user.correo=correo;
-    this.authService.deleteDriverAdmin(this.user)
-    .subscribe(
-      res =>{
-        if(res.estado=='usuario'){
-          Swal.fire("Error", "No se pudo eliminar el usuario", "warning");
-        }else{ 
-          Swal.fire("Usuario Eliminado", "Se ha eliminado el usuario de la base de datos", "success")
-          .then((avanzar)=>{
-            location.reload();
-          })
-        }
-        
-      },
-      err =>{
-        Swal.fire("Error", "Hubo un error en el sistema, favor intente de nuevo!", "warning");
-        
-      }
-    )
-      }
-    })
-    
-  
   }
 
 

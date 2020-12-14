@@ -51,6 +51,9 @@ export class EditProfileComponent implements OnInit {
 }
 
   ngOnInit(){
+    if(!this.authService.loggedIn()){
+      this.router.navigate(['/home'])
+    }
     this.authService.userState()
     .subscribe(
       res => {
@@ -60,9 +63,8 @@ export class EditProfileComponent implements OnInit {
         }else{
           this.authService.getProfile()
           .subscribe(
-            res => {//console.log(res.User.nombres);
+            res => {
               this.profile=res.User;
-              console.log();
                 this.getImage().subscribe(x => this.imgURL = x)             
             },
             err => {
@@ -124,7 +126,6 @@ export class EditProfileComponent implements OnInit {
       }else{
       this.authService.uploadProfile(this.fd,this.profile.email)
       .subscribe( result => {
-        console.log(result);
         location.reload();
       },
       error=>{
@@ -134,42 +135,6 @@ export class EditProfileComponent implements OnInit {
 
       }     
     }
-
-  /*PARA REVISAR SI EL USUARIO ESTA ACTIVADO
-  this.authService.userState()
-    .subscribe(
-      res => {
-        if(res.estado=='inactivo'){
-          this.router.navigate(['/verification']);
-          Swal.fire("Error", "Debe verificar su usuario para usar Jalón Universitario", "warning");
-        }else{
-          this.authService.getProfile()
-          .subscribe(
-            res => {//console.log(res.User.nombres);
-              this.profile=res.User;
-            },
-            err => {
-              if (err instanceof HttpErrorResponse) {
-                if (err.status === 401) {
-                  this.router.navigate(['/signin']);
-                }
-              }
-            }
-          )
-          
-        }       
-      },
-      err => {
-        if (err instanceof HttpErrorResponse) {
-          if (err.status === 401) {
-            this.router.navigate(['/signin']);
-          }
-        }
-      }
-    )
-
-
-  */
   
 editarPerfil(){
   Swal.fire({

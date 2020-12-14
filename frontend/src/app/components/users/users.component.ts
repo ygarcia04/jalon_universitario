@@ -18,7 +18,7 @@ export class UsersComponent implements OnInit {
   //elementos a mostrar en la tabla del html
     elements: any = [];
   //Arreglo de cabeceras de la tabla
-    headElements = ['ID', 'Nombre', 'Apellido', 'Correo', 'Cuenta','Genero','Direccion', 'Creado', 'Actualizado', 'Estado'];
+    headElements = ['ID', 'Nombre', 'Apellido', 'Correo','Codigo Verificación', 'Cuenta','Genero','Direccion', 'Creado', 'Actualizado', 'Estado'];
   //variable para la busqueda
     searchText: string = '';
   //variable para el Datasource de la tabla
@@ -55,14 +55,13 @@ ngOnInit() {
     res=>{
       //Guardando el numero de elementos de la consulta hecha
       this.docs=res.User;
-      console.log(this.docs);
       //Guardando todos los elementos de la consulta hecha en users
       this.users=res.usuario;
       //Llamado a la funcion que llena los elementos a mostrar en la tabla
       this.fillItems(this.docs);
       
     },
-    err=>{console.log(err)}
+    err=>{console.log('Error')}
   );
   }  
     
@@ -73,13 +72,19 @@ fillItems(limit){
     /*Llenando el arreglo de elementos, para agregar mas datos solo deben incluir una nueva linea
       Con la forma: nombreIndice: this.user[i].campoDeLaConsulta, tambien recuerden agregar un
       valor a headElements para el encabezado de cada columna que agreguen*/
+      let numero=i+1;
+      let codigo="Verificado";
+        if(this.users[i].codigo!=""){
+          codigo=this.users[i].codigo
+        }
     this.elements.push({
-      ID:i.toString(),
+      ID:numero.toString(),
       Nombre: this.users[i].nombres,
       Apellido: this.users[i].apellidos,
       Correo: this.users[i].email,
       Cuenta: this.users[i].numeroCuenta,
       Genero: this.users[i].sexo,
+      Codigo:codigo,
       Direccion: this.users[i].direccion,
       Creado: this.fomatearFecha( this.users[i].createdAt),
       Actualizado: this.fomatearFecha(this.users[i].updatedAt),
@@ -122,7 +127,6 @@ fomatearFecha(fecha){
 
 }
 eliminar(correo){
-  console.log(correo);
   Swal.fire({
     title: "Seguro que quieres eliminar esta cuenta?",
     icon: 'question',

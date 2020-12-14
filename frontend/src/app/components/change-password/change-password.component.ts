@@ -42,7 +42,6 @@ export class ChangePasswordComponent implements OnInit {
 
   verify(){
     var pass= this.changePassw.value.contrasenaNueva1;
-    console.log(pass);
     if(pass.length<8){
       this.template='<div class="alert alert-warning" role="alert"><div>La contraseña debe tener al menos 8 caracteres.</div></div>';
       this.validate=false;
@@ -65,6 +64,9 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if(!this.authservice.loggedIn()){
+      this.router.navigate(['/home'])
+    }
     this.authservice.userState()
     .subscribe(
       res => {

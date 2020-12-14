@@ -38,6 +38,7 @@ export class ProfileDriverComponent implements OnInit {
       }if(this.authService.loggedIn()){
         this.router.navigate(['/profile']);
       }else{
+        
       this.authService.userState()
       .subscribe(
         res => {
@@ -55,7 +56,7 @@ export class ProfileDriverComponent implements OnInit {
                 let currDate = new Date();
                 this.profile.edad= this.getEdad(this.profile.fechaNacimiento);       
                this.profile.fechaNacimiento= this.fomatearFecha(this.profile.fechaNacimiento);
-               this.getImage().subscribe(x => {console.log(x);this.imgURL = x})        
+               this.getImage().subscribe(x => {this.imgURL = x})        
               },
               err => {
                 if (err instanceof HttpErrorResponse) {

@@ -32,6 +32,9 @@ export class DeleteAccountComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if(!this.authservice.loggedIn()){
+      this.router.navigate(['/home']);
+    }
     this.user.contrasenaNueva1=this.deleteUserForm.value.contrasenaNueva1;
       this.user.contrasenaNueva2=this.deleteUserForm.value.contrasenaNueva2;
     this.authservice.userState()
@@ -40,7 +43,7 @@ export class DeleteAccountComponent implements OnInit {
         if(res.estado=='inactivo'){
           this.router.navigate(['/verification']);
           Swal.fire("Error", "Debe verificar su usuario para usar Jalón Universitario", "warning");
-        }     
+        }  
       },
       err => {
         if (err instanceof HttpErrorResponse) {

@@ -1,12 +1,11 @@
-
 const {Router}=require('express');
 const router = Router();
-
 const user = require('../models/usersModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require ('bcrypt-nodejs');
 
 router.post('/api/change-password', verifyToken, async (req, res) => {
+    try {
         const { contrasenaActual, contrasenaNueva1, contrasenaNueva2 } = req.body;
         if(contrasenaNueva1!=contrasenaNueva2){
             return res.json({estado:'password'});
@@ -25,7 +24,12 @@ router.post('/api/change-password', verifyToken, async (req, res) => {
             if(await user.updateOne({token},{$set:{password:hash}})){
                 return res.status(200).json({estado:'hecho'});
             } 
-             res.status(200).json({estado:'estado'});
+            return res.status(200).json({estado:'estado'});
+        
+    } catch (error) {
+        console.log(error)     
+    }
+        
 });
 
 
@@ -47,7 +51,7 @@ async function verifyToken(req, res, next) {
         req.userId = payload._id;
 		next();
 	} catch(e) {
-		//console.log(e)
+		console.log(e)
 		return res.status(401).send('Unauhtorized Request');
 	}
 }

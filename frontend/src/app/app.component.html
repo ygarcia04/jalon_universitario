@@ -43,7 +43,11 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/rutas" routerLinkActive="active">Agregar Ruta</a>
         </li>
-
+      </div>
+      <div *ngIf="authService.loggedInDriver();">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/ver-rutas" routerLinkActive="active">Mis Rutas</a>
+        </li>
       </div>
     </ul>
   <ul class= "navbar-nav ml-auto">
@@ -63,7 +67,7 @@
       <!--Jalones-->
       <div>
         <li class="nav-item" *ngIf="authService.loggedIn();">
-          <a class="nav-link" routerLink="/jalones-pendientes">Jalones Pendientes <mdb-badge *ngIf="numero>0" class="nav-item" danger="true" color="red"> {{numero}}</mdb-badge></a>
+          <a class="nav-link" routerLink="/jalones-pendientes">Jalones Pendientes</a>
           
         </li>
       </div>

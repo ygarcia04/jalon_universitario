@@ -1,23 +1,19 @@
 
 const {Router}=require('express');
 const router = Router();
-
 const user = require('../models/usersModel');
 const driver = require('../models/driverModel');
 const jwt = require('jsonwebtoken');
 
-
-
 router.post('/api/edit-profile', verifyToken, async (req, res) => {
-    const { telefono, direccion, facultad } = req.body;
-    let token = req.headers.authorization.split(' ')[1];
-    try {   
+    
+    try {  
+        const { telefono, direccion, facultad } = req.body;
+        let token = req.headers.authorization.split(' ')[1]; 
         const User = await user.findOne({token});
         if(User.estado=='inactivo'){
             return res.json({estado:'inactivo'});
         }
-        
-        
             email = User.email; 
             if(await user.updateOne({email},{$set:{telefono,direccion,facultad}})){
             res.json({estado:'Hecho'});
@@ -26,8 +22,8 @@ router.post('/api/edit-profile', verifyToken, async (req, res) => {
             res.json({estado:'Fallo'});
         }       
     } catch (error) {
-        console.log('Error en el sistema');
-        res.json({estado:'Sistema', token});
+        console.log(error);
+        return res.status(401).send('Error'); 
     }
 });
 
@@ -40,9 +36,7 @@ router.post('/api/edit-profile-driver', verifyToken, async (req, res) => {
         if(Driver.estado=='inactivo'){
             return res.json({estado:'inactivo'});
         }
-        
-        
-            email = Driver.email; 
+        email = Driver.email; 
             if(await driver.updateOne({email},{$set:{telefono,direccion,facultad}})){
             res.json({estado:'Hecho'});
             }
@@ -50,8 +44,8 @@ router.post('/api/edit-profile-driver', verifyToken, async (req, res) => {
             res.json({estado:'Fallo'});
         }       
     } catch (error) {
-        console.log('Error en el sistema');
-        res.json({estado:'Sistema', token});
+        console.log(error);
+        return res.status(401).send('Error'); 
     }
 });
 
@@ -74,7 +68,7 @@ async function verifyToken(req, res, next) {
         req.userId = payload._id;
 		next();
 	} catch(e) {
-		//console.log(e)
+		console.log(e)
 		return res.status(401).send('Unauhtorized Request');
 	}
 }

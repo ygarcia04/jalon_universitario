@@ -48,7 +48,6 @@ export class SigninComponent implements OnInit {
       Swal.fire("Error", "El correo no se encuentra en la base", "warning");
       return false;
     }
-    console.log(this.user);
     this.authservice.signIn(this.user)
     .subscribe(
       res =>{ 

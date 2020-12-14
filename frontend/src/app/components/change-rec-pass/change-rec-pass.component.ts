@@ -40,7 +40,6 @@ export class ChangeRecPassComponent implements OnInit {
 
   verify(){
     var pass= this.changePassw.value.contrasenaNueva1;
-    console.log(pass);
     if(pass.length<8){
       this.template='<div class="alert alert-warning" role="alert"><div>La contraseña debe tener al menos 8 caracteres.</div></div>';
       this.validate=false;
@@ -81,10 +80,10 @@ export class ChangeRecPassComponent implements OnInit {
           Swal.fire("Error", "No se pudo confirmar la contraseña, verifique que ambos campos sean iguales", "warning");
         }else if(res.estado=='hecho' && res.type=='usuario'){
           Swal.fire("Completado", "Su contraseña fue actualizada con éxito", "success");
-          this.router.navigate(['/profile']);
+          this.authservice.logout();
         }else if(res.estado=='hecho' && res.type=='driver'){
           Swal.fire("Completado", "Su contraseña fue actualizada con éxito", "success");
-          this.router.navigate(['/profile-driver']);
+          this.authservice.logoutDriver();
         }else{
         Swal.fire("Error","Hubo un error en el sistema, favor intente de nuevo", "warning");
         }        

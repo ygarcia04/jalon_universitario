@@ -55,14 +55,13 @@ export class DriversActComponent implements OnInit {
       res=>{
         //Guardando el numero de elementos de la consulta hecha
         this.docs=res.User;
-        console.log(this.docs);
         //Guardando todos los elementos de la consulta hecha en users
         this.users=res.usuario;
         //Llamado a la funcion que llena los elementos a mostrar en la tabla
         this.fillItems(this.docs);
         
       },
-      err=>{console.log(err)}
+      err=>{console.log('Error')}
     );
     } 
       
@@ -88,7 +87,6 @@ export class DriversActComponent implements OnInit {
   }
     this.mdbTable.setDataSource(this.elements);
     this.previous = this.mdbTable.getDataSource();
-    console.log(this.elements);
   }
   
   searchItems() {
@@ -123,7 +121,6 @@ export class DriversActComponent implements OnInit {
   }
   
   eliminar(correo){
-    console.log(correo);
     Swal.fire({
       title: "Seguro que quieres eliminar la cuenta?",
       icon: 'question',

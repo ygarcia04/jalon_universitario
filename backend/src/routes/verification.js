@@ -1,16 +1,11 @@
-
 const {Router}=require('express');
 const router = Router();
-const { encrypt, decrypt } = require('./functions');
-
+const { decrypt } = require('./functions');
 const user = require('../models/usersModel');
 const driver = require('../models/driverModel');
 const jwt = require('jsonwebtoken');
 
-var token_1 //Variable para traer el token del usuario conductor
-
-router.post('/api/verification', async (req, res) => {
-     
+router.post('/api/verification',verifyToken, async (req, res) => {   
     try { 
         const { codigo } = req.body;
         let token = req.headers.authorization.split(' ')[1];
@@ -22,7 +17,6 @@ router.post('/api/verification', async (req, res) => {
             }else{
                 res.json({estado:'Fallo'});
             }  
-
         }
         if(User = await user.findOne({token})){
             if(codigo==User.codigo){
@@ -33,18 +27,14 @@ router.post('/api/verification', async (req, res) => {
                 res.json({estado:'Fallo'});
             }  
 
-        }
-   
-          
-          
+        }          
     } catch (error) {
-        console.log(error);
-        res.json({estado:'Sistema'});
+        console.log(error)
+        return res.status(401).json({estado:'Error'})
     }
 });
 
-router.get('/api/verification', async (req, res) => {
-    
+router.get('/api/verification', async (req, res) => {  
     try {
         const userIv=req.query.user;
         const userContent=req.query.user1;
@@ -77,9 +67,30 @@ router.get('/api/verification', async (req, res) => {
             res.json({estado:'usuario'});
         }      
     } catch (error) {
-        console.log(error);
-        res.json({estado:'Sistema'});
+        console.log(error)
+        return res.status(401).json({estado:'Error'})
     }
 });
 
+async function verifyToken(req, res, next) {
+    try {
+        if (!req.headers.authorization) {
+            return res.status(401).send('Unauhtorized Request');
+        }
+        let token = req.headers.authorization.split(' ')[1];
+        if (token === 'null') {
+            return res.status(401).send('Unauhtorized Request');
+        }
+
+        const payload = await jwt.verify(token, 'secretkey');
+        if (!payload) {
+            return res.status(401).send('Unauhtorized Request');
+        }
+        req.userId = payload._id;
+        next();
+    } catch(e) {
+        console.log(e)
+        return res.status(401).send('Unauhtorized Request');
+    }
+}
 module.exports = router;

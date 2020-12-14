@@ -1,7 +1,5 @@
-
 const {Router}=require('express');
 const router = Router();
-
 const user = require('../models/usersModel');
 const admin = require('../models/adminModels');
 const driver = require('../models/driverModel');
@@ -10,8 +8,7 @@ const bcrypt = require ('bcrypt-nodejs');
 
 
 router.post('/api/signin', async (req, res) => {
-    
-
+    try {
         const { email, password } = req.body;
         const email_l =email.toLowerCase(); 
         const Admin = await admin.findOne({email:email_l});
@@ -62,12 +59,11 @@ router.post('/api/signin', async (req, res) => {
              if(bcrypt.compareSync(password, Driver.password)){
                 if(Driver.estado =='inactivo') {
                     const token = Driver.token;
-                    console.log(token);
                     await driver.updateOne({email:email_l},{$set:{intentos:0}})
                     return res.status(200).json({estado:'inactivo',token:token, type:'driver'});
                 }else if(Driver.estado =='verificarCorreo') {
                     const token = Driver.token;
-                    console.log(token);
+                    
                     await driver.updateOne({email:email_l},{$set:{intentos:0}})
                     return res.status(200).json({estado:'verificarCorreo', token:token, type:'driver'});
                 }else{
@@ -164,10 +160,13 @@ router.post('/api/signin', async (req, res) => {
             return res.status(200).json({token:token, estado:"admin"});  
 
         }else{
-            console.log('No entro');
+            
             return res.json({estado:'password' ,type:'usuario'});
-        }       
-
+        }   
+    } catch (error) {
+        console.log(error)
+        res.json({estado:'Error'});       
+    }
         
 });
 

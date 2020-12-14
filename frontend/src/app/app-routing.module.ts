@@ -37,6 +37,7 @@ import { JalonesComponent } from "./components/jalones/jalones.component";
 import { JalonesPendientesComponent } from "./components/jalones-pendientes/jalones-pendientes.component";
 import { JalonesDriverComponent } from "./components/jalones-driver/jalones-driver.component";
 import { JalonesPendientesDriverComponent } from "./components/jalones-pendientes-driver/jalones-pendientes-driver.component";
+import { ViewRoutesComponent } from "./components/view-routes/view-routes.component";
 
 const routes: Routes = [
   //verificar driver admin
@@ -62,6 +63,11 @@ const routes: Routes = [
   {
     path:'jalones-pendientes-driver',
     component: JalonesPendientesDriverComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path:'ver-rutas',
+    component: ViewRoutesComponent,
     canActivate: [AuthGuard]
   },
 {

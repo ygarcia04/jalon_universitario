@@ -1,22 +1,17 @@
 
 const {Router}=require('express');
 const router = Router();
-const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-
 const user = require('../models/usersModel');
 const pedirJalon = require ('../models/pedirJalonModel');
-const { findOne } = require('../models/usersModel');
-var prueba = ''
+const jwt = require('jsonwebtoken');
 
-router.post('/api/pedir-jalon', async (req, res) => {
-    const {email, Nombre, Apellido, Facultad, TipoVehiculo, Ruta, HoraSalida, TipoDestino, Descripcion}= req.body;
-    let token = req.headers.authorization.split(' ')[1];
-    
+router.post('/api/pedir-jalon',verifyToken, async (req, res) => {    
     try {
+        const {email, Nombre, Apellido, Facultad, TipoVehiculo, Ruta, HoraSalida, TipoDestino, Descripcion}= req.body;
+        let token = req.headers.authorization.split(' ')[1];
         if (User = await user.findOne({token})){
             if (Jalon = await pedirJalon.findOne ({"$expr":{"$and":[{"$eq":["$emailconductor",email]}, {"$eq":["$emailpasajero",User.email]}, {"$eq":["$horaSalida",HoraSalida]}, {"$eq":["$ruta",Ruta]}]}})){
-                console.log (HoraSalida);
                 return res.json({estado:'repetido'});
             }else{
                 const newUser = new pedirJalon ({nombresconductor:Nombre, apellidosconductor:Apellido, emailconductor:email, 
@@ -29,12 +24,12 @@ router.post('/api/pedir-jalon', async (req, res) => {
                  const transporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
-                    user: 'correop726@gmail.com',
+                    user: 'jalonuniversitario@gmail.com',
                     pass: 'Password.1234'
                     }  
                 });
                 const mailOptions = {
-                    from: 'correop726@gmail.com',
+                    from: 'noreply@jalonuniversitario.tk',
                     to: email,
                     subject: 'Petición de asiento Jalón Universitario',
                     html: "Usted ha recibido una solicitud de asiento para su viaje del día de hoy a las "+HoraSalida+"<br><br> Favor ingrese a la aplicación y brinde contestación a la solicitud<br></b>"
@@ -61,5 +56,26 @@ router.post('/api/pedir-jalon', async (req, res) => {
 
 });
 
+async function verifyToken(req, res, next) {
+    try {
+        if (!req.headers.authorization) {
+            return res.status(401).send('Unauhtorized Request');
+        }
+        let token = req.headers.authorization.split(' ')[1];
+        if (token === 'null') {
+            return res.status(401).send('Unauhtorized Request');
+        }
+
+        const payload = await jwt.verify(token, 'secretkey');
+        if (!payload) {
+            return res.status(401).send('Unauhtorized Request');
+        }
+        req.userId = payload._id;
+        next();
+    } catch(e) {
+        console.log(e)
+        return res.status(401).send('Unauhtorized Request');
+    }
+}
 
 module.exports = router;

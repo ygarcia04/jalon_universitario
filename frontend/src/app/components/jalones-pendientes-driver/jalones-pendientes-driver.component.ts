@@ -4,6 +4,7 @@ import {MdbTableDirective, MdbTablePaginationComponent} from 'angular-bootstrap-
 import {AuthService} from '../../services/auth.service';
 import { Router } from "@angular/router";
 import Swal from "sweetalert2/dist/sweetalert2.js";
+import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'abe-jalones-pendientes-driver',
   templateUrl: './jalones-pendientes-driver.component.html',
@@ -47,6 +48,22 @@ constructor(
     if(!this.authService.loggedInDriver()){
       this.router.navigate(['/home']);
     }else {
+      this.authService.userState()
+    .subscribe(
+      res => {
+        if(res.estado=='verificarCorreo'){
+          this.router.navigate(['/verification']);
+          Swal.fire("Error", "Debe verificar su usuario para usar Jalón Universitario", "warning");
+        }       
+      },
+      err => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 401) {
+            this.router.navigate(['/signin']);
+          }
+        }
+      }
+    )
   
     /*Llamado a la funcion que trae la consulta del backend, lleva un parametro (this.elements) 
       porque en el servicio "auth" deje la funcion como si fuese post, en realidad deberia ser
@@ -56,14 +73,13 @@ constructor(
       res=>{
         //Guardando el numero de elementos de la consulta hecha
         this.docs=res.User;
-        console.log(this.docs);
         //Guardando todos los elementos de la consulta hecha en users
         this.users=res.usuario;
         //Llamado a la funcion que llena los elementos a mostrar en la tabla
         this.fillItems(this.docs);
         
       },
-      err=>{console.log(err)}
+      err=>{console.log('Error')}
     );
     }  
   }
@@ -89,7 +105,6 @@ constructor(
   }
     this.mdbTable.setDataSource(this.elements);
     this.previous = this.mdbTable.getDataSource();
-    console.log(this.elements)
   }
   
   searchItems() {
@@ -124,7 +139,6 @@ constructor(
   
   }
   rechazar(id){
-    console.log(id);
     this.id.id=id
     Swal.fire({
       title: "Seguro que quieres rechazar?",
@@ -159,7 +173,6 @@ constructor(
   
   }
   aceptar(id){
-    console.log(id);
     this.id.id=id
     Swal.fire({
       title: "Seguro que quieres aceptar?",

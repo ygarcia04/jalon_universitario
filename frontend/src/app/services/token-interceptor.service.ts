@@ -18,6 +18,13 @@ export class TokenInterceptorService implements HttpInterceptor {
         }
       });
       return next.handle(tokenizeReq);
+    }if(this.authService.loggedInAdmin()){
+      let tokenizeReq = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${this.authService.getAdminToken()}`
+        }
+      });
+      return next.handle(tokenizeReq);
     }
     let tokenizeReq = req.clone({
       setHeaders: {

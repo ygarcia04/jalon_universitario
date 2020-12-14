@@ -57,14 +57,10 @@ export class VerificDriverComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    /*if(this.authService.loggedIn()){
+    if(this.authService.loggedIn()){
       this.router.navigate(['/profile']);
     }if(this.authService.loggedInDriver()){
       this.router.navigate(['/profile-driver']);
-    }else{*/
-
-    if(!this.authService.loggedInAdmin()){
-      this.router.navigate(['/home']);
     }else{
       this.activatedRoute.queryParams.subscribe(params => {
         let userMail = params['user'];
@@ -74,15 +70,13 @@ export class VerificDriverComponent implements OnInit {
           .subscribe(
             res => {
               this.driver=res.Driver;
-              console.log(this.driver.email);
               let currDate = new Date();
-              this.driver.edad= this.getEdad(this.driver.fechaNacimiento);  
-              console.log(this.driver.edad)      
+              this.driver.edad= this.getEdad(this.driver.fechaNacimiento);     
               this.driver.fechaNacimiento= this.fomatearFecha(this.driver.fechaNacimiento);
-              this.getImageDriver().subscribe(x => {console.log(x);this.imgDriver = x}) 
-              this.getImageLicencia().subscribe(x => {console.log(x);this.imgLicencia= x})
-              this.getImageRevision().subscribe(x => {console.log(x);this.imgRevision = x})
-              this.getImagePlaca().subscribe(x => {console.log(x);this.imgPlaca= x})
+              this.getImageDriver().subscribe(x => {this.imgDriver = x}) 
+              this.getImageLicencia().subscribe(x => {this.imgLicencia= x})
+              this.getImageRevision().subscribe(x => {this.imgRevision = x})
+              this.getImagePlaca().subscribe(x => {this.imgPlaca= x})
             },
             err => {
               if (err instanceof HttpErrorResponse) {

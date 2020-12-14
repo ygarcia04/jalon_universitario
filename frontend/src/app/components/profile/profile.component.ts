@@ -73,11 +73,10 @@ export class ProfileComponent implements OnInit {
         }else{
           this.authService.getProfile()
           .subscribe(
-            res => {//console.log(res.User.nombres);
+            res => {
               this.profile=res.User;
               let currDate = new Date();
-              this.profile.edad= this.getEdad(this.profile.fechaNacimiento);  
-              console.log(this.profile.edad)      
+              this.profile.edad= this.getEdad(this.profile.fechaNacimiento);       
              this.profile.fechaNacimiento= this.fomatearFecha(this.profile.fechaNacimiento);
              this.getImage().subscribe(x => this.imgURL = x)        
             },

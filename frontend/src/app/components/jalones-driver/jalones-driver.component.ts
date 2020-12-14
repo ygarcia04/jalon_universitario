@@ -4,6 +4,7 @@ import {MdbTableDirective, MdbTablePaginationComponent} from 'angular-bootstrap-
 import {AuthService} from '../../services/auth.service';
 import { Router } from "@angular/router";
 import Swal from "sweetalert2/dist/sweetalert2.js";
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'abe-jalones-driver',
@@ -46,6 +47,22 @@ constructor(
     if(!this.authService.loggedInDriver()){
       this.router.navigate(['/home']);
     }else {
+      this.authService.userState()
+    .subscribe(
+      res => {
+        if(res.estado=='verificarCorreo'){
+          this.router.navigate(['/verification']);
+          Swal.fire("Error", "Debe verificar su usuario para usar Jalón Universitario", "warning");
+        }     
+      },
+      err => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 401) {
+            this.router.navigate(['/signin']);
+          }
+        }
+      }
+    )
   
     /*Llamado a la funcion que trae la consulta del backend, lleva un parametro (this.elements) 
       porque en el servicio "auth" deje la funcion como si fuese post, en realidad deberia ser
@@ -55,14 +72,13 @@ constructor(
       res=>{
         //Guardando el numero de elementos de la consulta hecha
         this.docs=res.User;
-        console.log(this.docs);
         //Guardando todos los elementos de la consulta hecha en users
         this.users=res.usuario;
         //Llamado a la funcion que llena los elementos a mostrar en la tabla
         this.fillItems(this.docs);
         
       },
-      err=>{console.log(err)}
+      err=>{console.log('Error')}
     );
     }  
   }
@@ -119,41 +135,6 @@ constructor(
     var date = new Date(fecha);
     var opciones={ year: 'numeric', month:'long', day:'numeric'};
     return date.toLocaleString('es-MX', opciones);
-  
-  }
-  eliminar(correo){
-    console.log(correo);
-    Swal.fire({
-      title: "Seguro que quiere eliminar esta cuenta?",
-      icon: 'question',
-      showDenyButton: true,
-      confirmButtonText: 'Continuar',
-      denyButtonText: 'Cancelar',
-    })
-    .then((Delete)=>{
-      if(Delete.isConfirmed){
-        this.user.correo=correo;
-    this.authService.deleteDriverAdmin(this.user)
-    .subscribe(
-      res =>{
-        if(res.estado=='usuario'){
-          Swal.fire("Error", "No se pudo eliminar el usuario", "warning");
-        }else{ 
-          Swal.fire("Usuario Eliminado", "Se ha eliminado el usuario de la base de datos", "success")
-          .then((avanzar)=>{
-            location.reload();
-          })
-        }
-        
-      },
-      err =>{
-        Swal.fire("Error", "Hubo un error en el sistema, favor intente de nuevo!", "warning");
-        
-      }
-    )
-      }
-    })
-    
   
   }
 

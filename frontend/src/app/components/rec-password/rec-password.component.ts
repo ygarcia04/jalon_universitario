@@ -40,7 +40,6 @@ export class RecPasswordComponent implements OnInit {
   }
 
    recPass(){
-     console.log(this.user);
      this.authService.recPass(this.user)
      .subscribe(
       res =>{ 
@@ -53,6 +52,9 @@ export class RecPasswordComponent implements OnInit {
           Swal.fire("Error", "El correo ingresado no es de la UNAH", "warning");
         }else if(res.estado=='noEnviado'){
           Swal.fire("Error", "No se pudo enviar el correo, favor intente de nuevo", "warning");
+        }else if(res.estado=='inactivo'){
+          Swal.fire("Error", "Su usuario aun no ha sido verificado por el administrador, para recuperar su contraseña, debe esperar el correo donde se le informa la activación de su cuenta", "warning");
+          this.router.navigate(['/home']); 
         }           
       },
       err =>{

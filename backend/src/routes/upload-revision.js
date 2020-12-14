@@ -1,9 +1,9 @@
 const { Router, json } = require('express');
 const path = require('path');
-const { unlink } = require('fs-extra');
 const router = Router();
 var multer = require("multer");
 const drive = require('../models/driverModel');
+const jwt = require('jsonwebtoken');
 
 var dirRevision='';
 var email = '';
@@ -13,15 +13,12 @@ const storage = multer.diskStorage({
         cb(null, './upload/drivers/revision')
     },
     filename: function(req, file, cb) {
-        //console.log (req.query.id)
         name=req.query.id + Date.now() + '.jpg';
         email = req.query.id
         dirRevision=name;
         cb(null, name)
     }
 })
-
-
 
 const revision = multer({
     storage: storage,
@@ -35,23 +32,13 @@ const revision = multer({
     }
 })
 
-
-
-
 router.post('/api/upload-profile-revision', revision.single('file'), async(req, res) => {
-
     try {
-        console.log(dirRevision)
-        //const image = new Image();
-
-        // the file is uploaded when this route is called with formdata.
-
-        // now you can store the file name in the db if you want for further reference.
+        const email = req.query.id
         const Drive = await drive.findOne({email});
         
         const perfilPath = path.join(__dirname, "./upload/drivers/revision", Drive.picRevision);
-            //console.log (perfilPath)
-            //email = Conductor.email; 
+ 
             if(await drive.updateOne({email},{$set:{picRevision:dirRevision}})){
                 
             return res.json({estado:'Hecho'});
@@ -59,33 +46,46 @@ router.post('/api/upload-profile-revision', revision.single('file'), async(req, 
         else{
             return res.json({estado:'Fallo'});
         } 
-
     } catch (error) {
-
-        res.json({ estado: 'error' });
-
+        console.log(error)
+        return res.status(401).json({estado:'Error'}) 
     }
-
-
 });
 
 
-router.get('/api/profile-revision', async (req, res) => {
-    correo=req.query.email
-
-     //let token = req.headers.authorization.split(' ')[1];
+router.get('/api/profile-revision',verifyToken, async (req, res) => {
+    try {
+        correo=req.query.email
         const Drive = await drive.findOne({email:correo});
-
-    const imageName = Drive.picRevision; 
-    console.log(imageName);
-    const imagePath = path.join(__dirname, "../../upload/drivers/revision", imageName);
-    console.log(imagePath);
-
-    res.sendFile(imagePath);
-
-
+        const imageName = Drive.picRevision; 
+        const imagePath = path.join(__dirname, "../../upload/drivers/revision", imageName);
+        res.sendFile(imagePath);
+    } catch (error) {
+        console.log(error)
+        return res.status(401).json({estado:'Error'})      
+    }
 });
 
+async function verifyToken(req, res, next) {
+    try {
+        if (!req.headers.authorization) {
+            return res.status(401).send('Unauhtorized Request');
+        }
+        let token = req.headers.authorization.split(' ')[1];
+        if (token === 'null') {
+            return res.status(401).send('Unauhtorized Request');
+        }
 
+        const payload = await jwt.verify(token, 'secretkey');
+        if (!payload) {
+            return res.status(401).send('Unauhtorized Request');
+        }
+        req.userId = payload._id;
+        next();
+    } catch(e) {
+        console.log(e)
+        return res.status(401).send('Unauhtorized Request');
+    }
+}
 
 module.exports = router;

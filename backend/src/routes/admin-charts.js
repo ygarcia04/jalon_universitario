@@ -1,13 +1,10 @@
 const {Router, json}=require('express');
 const router = Router();
-
 const user = require('../models/usersModel');
 const driver = require ('../models/driverModel');
 const jwt = require('jsonwebtoken');
 
-
-
-router.post('/api/admin', async (req, res) => {
+router.post('/api/admin',verifyToken, async (req, res) => {
     try {
         const{month}=req.body;       
         const vmonth = await user.countDocuments({ "$expr": { "$eq": [{ "$month": "$createdAt" }, month] } });
@@ -23,7 +20,29 @@ router.post('/api/admin', async (req, res) => {
     } catch (error) {
         console.log(error);
         console.log('Error en el sistema');
-        res.json({estado:'Sistema'});
+        return res.json({estado:'Sistema'});
     }
 });
+
+async function verifyToken(req, res, next) {
+    try {
+        if (!req.headers.authorization) {
+            return res.status(401).send('Unauhtorized Request');
+        }
+        let token = req.headers.authorization.split(' ')[1];
+        if (token === 'null') {
+            return res.status(401).send('Unauhtorized Request');
+        }
+
+        const payload = await jwt.verify(token, 'secretkey');
+        if (!payload) {
+            return res.status(401).send('Unauhtorized Request');
+        }
+        req.userId = payload._id;
+        next();
+    } catch(e) {
+        console.log(e)
+        return res.status(401).send('Unauhtorized Request');
+    }
+}
 module.exports = router;

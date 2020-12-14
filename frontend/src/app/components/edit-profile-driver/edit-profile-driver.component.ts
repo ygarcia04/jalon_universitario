@@ -49,6 +49,9 @@ export class EditProfileDriverComponent implements OnInit {
   'Ciencias Médicas', 'Ciencias Económicas, Administrativas y Contables'];
 
   ngOnInit(){
+    if(!this.authService.loggedInDriver()){
+      this.router.navigate(['/home'])
+    }
     this.authService.userState()
     .subscribe(
       res => {

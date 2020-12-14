@@ -66,7 +66,7 @@ export class AdminComponent implements OnInit {
     },
     ];
 
-    public chartType1: string = 'bar';
+  public chartType1: string = 'bar';
   public chartDatasets1: Array<any> = [
     { data: [0.01,0.01,0.01,0.01,0.01,0.01] }
   ];

@@ -17,9 +17,9 @@ import { $ } from 'protractor';
 })
 export class SignupdriveComponent implements OnInit {
   selectedFile: File = null;
-  fd = new FormData(); //fd para la imagen de la licencia
-  fdr = new FormData(); //fdr para la imagen de la revision
-  fdp = new FormData(); //fdp para la imagen de la placa
+  fd = null; //fd para la imagen de la licencia
+  fdr = null; //fdr para la imagen de la revision
+  fdp = null; //fdp para la imagen de la placa
  
   signup: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.email, Validators.required ]),
@@ -57,7 +57,11 @@ export class SignupdriveComponent implements OnInit {
     picRevision: '',
     picPlaca: ''
   };
+  correo={
+    correo:''
+  }
   template='';
+  token='';
   validate=true;
 
   public data: string[] = ['Ciencias Sociales', 'Química y Farmacia', 'Odontología',
@@ -81,8 +85,7 @@ export class SignupdriveComponent implements OnInit {
     this.fd=new FormData();
     this.selectedFile = <File>event.target.files[0];
     let fileName=this.selectedFile.name.split(".").pop();
-    console.log (fileName)
-    if(fileName == null){
+    if(fileName == ""){
         alert('No es jpeg');
         this.fd=null;
         return false;
@@ -95,8 +98,7 @@ export class SignupdriveComponent implements OnInit {
     this.fdr=new FormData();
     this.selectedFile = <File>event.target.files[0];
     let fileName=this.selectedFile.name.split(".").pop();
-    console.log (fileName)
-    if(fileName == null){
+    if(fileName == ""){
         alert('No es jpeg');
         this.fdr=null;
         return false;
@@ -109,9 +111,7 @@ createFormDatap(event) {
   this.fdp=new FormData();
   this.selectedFile = <File>event.target.files[0];
   let fileName=this.selectedFile.name.split(".").pop();
-  console.log (fileName)
-  console.log(this.selectedFile.size)
-  if(fileName == null){
+  if(fileName == ""){
       alert('No es jpeg');
       this.fdp=null;
       return false;
@@ -119,81 +119,7 @@ createFormDatap(event) {
   this.fdp.append('file', this.selectedFile, this.selectedFile.name);
 }
 
-  //Licencia
-  upload() {
-    if(this.fd==null){
-      alert('Debe ingresar una imagen de la licencia');
-      return false;
-    }else{
-    this.authService.uploadLicencia(this.fd,this.user.email)
-    .subscribe( result => {
-      if (result.estado == "error"){
-        this.authService.deleteDriveLicencia(this.user.email).subscribe(res => {}, err => {});
-        Swal.fire("Error", "Debe incluir una imagen de la licencia", "error");
-        return false;
-      }else{
-        this.uploadr();
-      }
-      
-    },
-    error=>{
-      alertify.error('Error');
-      return false;
-    });
-
-    }     
-  }
-
-  //Revision
-  uploadr() {
-    if(this.fdr==null){
-      alert('Debe ingresar una imagen de la revisión');
-      return false;
-    }else{
-    this.authService.uploadRevision(this.fdr,this.user.email)
-    .subscribe( result => {
-      if (result.estado == "error"){
-        this.authService.deleteDriveRevision(this.user.email).subscribe(res => {}, err => {});
-        Swal.fire("Error", "Debe incluir una imagen de la revisión", "error");
-        return false;
-      }else{
-        this.uploadp();
-      }
-      
-    },
-    error=>{
-      alertify.error('Error');
-      return false;
-    });
-
-    }     
-  }
-
-  //Placa
-  uploadp() {
-    if(this.fdp==null){
-      alertify.error('Debe ingresar una imagen de su vehículo');
-      return false;
-    }else{
-    this.authService.uploadPlaca(this.fdp,this.user.email)
-    .subscribe( result => {
-      if (result.estado == "error"){
-        this.authService.deleteDrivePlaca(this.user.email).subscribe(res => {}, err => {});
-        Swal.fire("Error", "Debe incluir una imagen de su vehículo", "error");
-        return false;
-      }else{
-        Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu correo e ingresa el código que recibiste o usa el enlace para verificar tu correo", "success");
-        this.router.navigate(['/verification']);
-      }
-      
-    },
-    error=>{
-      alertify.error('Hubo un error');
-      return false;
-    });
-
-    }     
-  }
+ 
 
   verify(){
     var pass= this.signup.value.password;
@@ -230,7 +156,6 @@ createFormDatap(event) {
       return false;
     }
     this.user.vpassword = this.signup.value.vpassword;
-    console.log(this.user);
     if(this.user.nombres==""){
       alertify.error('No puede dejar el nombre en blanco');
       return false;
@@ -316,9 +241,11 @@ createFormDatap(event) {
           }else if(res.estado=='email'){
             Swal.fire("Error", "No se pudo enviar el correo", "warning");
             return false;
-          }else{
-            localStorage.setItem('driver', res.token);
+          }else if(res.estado=='hecho'){
+            this.token= res.token;
             this.upload()
+          }else{
+            Swal.fire("Error", "No se pudo registrar, intente de nuevo", "warning");
           }
           
         },
@@ -330,18 +257,83 @@ createFormDatap(event) {
     } 
   }
 
-  //Licencia
-  getImage(): Observable<SafeResourceUrl> {
-    return  this.authService.getProfileLicencia();
+   //Licencia
+   upload() {
+    if(this.fd==null){
+      this.authService.deleteDriveLicencia(this.user.email).subscribe(res => {}, err => {});
+      alertify.error('Debe ingresar una imagen de la licencia');
+      return false;
+    }else{
+    this.authService.uploadLicencia(this.fd,this.user.email)
+    .subscribe( result => {
+      if (result.estado == "error"){
+        this.authService.deleteDriveLicencia(this.user.email).subscribe(res => {}, err => {});
+        Swal.fire("Error", "Debe incluir una imagen de la licencia", "error");
+        return false;
+      }else{
+        this.uploadr();
+      }
+      
+    },
+    error=>{
+      alertify.error('Error');
+      return false;
+    });
+
+    }     
   }
 
   //Revision
-  getImager(): Observable<SafeResourceUrl> {
-    return  this.authService.getProfileRevision();
+  uploadr() {
+    if(this.fdr==null){
+      this.authService.deleteDriveRevision(this.user.email).subscribe(res => {}, err => {});
+      alertify.error('Debe ingresar una imagen de la revisión');
+      return false;
+    }else{
+    this.authService.uploadRevision(this.fdr,this.user.email)
+    .subscribe( result => {
+      if (result.estado == "error"){
+        this.authService.deleteDriveRevision(this.user.email).subscribe(res => {}, err => {});
+        Swal.fire("Error", "Debe incluir una imagen de la revisión", "error");
+        return false;
+      }else{
+        this.uploadp();
+      }     
+    },
+    error=>{
+      alertify.error('Error');
+      return false;
+    });
+
+    }     
   }
-  
+
   //Placa
-  getImagep(): Observable<SafeResourceUrl> {
-    return  this.authService.getProfilePlaca();
+  uploadp() {
+    if(this.fdp==null){
+      this.authService.deleteDrivePlaca(this.user.email).subscribe(res => {}, err => {});
+      alertify.error('Debe ingresar una imagen de su vehículo');
+      return false;
+    }else{
+    this.authService.uploadPlaca(this.fdp,this.user.email)
+    .subscribe( result => {
+      if (result.estado == "error"){
+        this.authService.deleteDrivePlaca(this.user.email).subscribe(res => {}, err => {});
+        Swal.fire("Error", "Debe incluir una imagen de su vehículo", "error");
+        return false;
+      }else{
+        Swal.fire("Registro Exitoso", "Bienvenido a Jalón Universitario, revisa tu correo e ingresa el código que recibiste o usa el enlace para verificar tu correo", "success");
+        localStorage.setItem('driver',this.token);
+        this.router.navigate(['/verification']);
+      }
+      
+    },
+    error=>{
+      alertify.error('Hubo un error');
+      return false;
+    });
+
+    }     
   }
+
 }

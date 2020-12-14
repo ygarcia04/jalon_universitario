@@ -33,6 +33,9 @@ logoutDriver() {
 getTokenDriver(){
   return localStorage.getItem('driver');
 }
+getRutasDriver(){
+  return this.http.get<any>(this.URL + '/get-routes-driver');  
+}
 getProfilePicDriver(){
   return this.http.get(this.URL+'/profile-pic-driver', { responseType: 'blob' })
     .pipe(
@@ -74,6 +77,16 @@ deleteDriverAdmin(correo){
   return this.http.post<any>(this.URL +'/delete-driver-admin', correo);
 } 
 //fin conductor
+
+//rutas
+eliminarRuta(id){​​
+  return this.http.get<any>(this.URL + '/delete-route-driver?id='+id);  
+}​​
+reiniciarRuta(ruta){​​
+  return this.http.post<any>(this.URL + '/restart-route-driver',ruta);  
+}​​
+//fin rutas
+
 //Jalones
 jalonesPendientesUser(){
   return this.http.get<any>(this.URL +'/get-jalones-user-pendientes');
@@ -125,7 +138,6 @@ getProfile() {
 }
 
 signIn(user){
-  console.log(this.URL);
   return this.http.post<any>(this.URL + '/signin', user);
 
 }

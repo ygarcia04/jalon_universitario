@@ -1,9 +1,9 @@
 const { Router, json } = require('express');
 const path = require('path');
-const { unlink } = require('fs-extra');
 const router = Router();
 var multer = require("multer");
 const drive = require('../models/driverModel');
+const jwt = require('jsonwebtoken');
 
 var dirlicencia='';
 var email = '';
@@ -13,7 +13,6 @@ const storage = multer.diskStorage({
         cb(null, './upload/drivers/licencia')
     },
     filename: function(req, file, cb) {
-        //console.log (req.query.id)
         name=req.query.id + Date.now() + '.jpg';
         email = req.query.id
         dirlicencia=name;
@@ -37,58 +36,58 @@ const licencia = multer({
 
 
 
-
 router.post('/api/upload-profile-licencia', licencia.single('file'), async(req, res) => {
-
     try {
-        console.log(dirlicencia)
-        //const image = new Image();
-
-        // the file is uploaded when this route is called with formdata.
-
-        // now you can store the file name in the db if you want for further reference.
-        const Drive = await drive.findOne({email});
-        
+        const email = req.query.id
+        const Drive = await drive.findOne({email: email});   
         const perfilPath = path.join(__dirname, "./upload/drivers/licencia", Drive.picLicencia);
-            //console.log (perfilPath)
-            //email = Conductor.email; 
-            if(await drive.updateOne({email},{$set:{picLicencia:dirlicencia}})){
+
+        if(await drive.updateOne({email},{$set:{picLicencia:dirlicencia}})){
                 
             return res.json({estado:'Hecho'});
-            }
+        }
         else{
             return res.json({estado:'Fallo'});
         } 
-
     } catch (error) {
-       
-        res.json({ estado: 'error' });
-
+        console.log(error)
+        return res.status(401).json({estado:'Error'})
     }
-
-
 });
 
 
-
-router.get('/api/profile-licencia', async (req, res) => {
-
-    correo=req.query.email
-     //let token = req.headers.authorization.split(' ')[1];
+router.get('/api/profile-licencia',verifyToken, async (req, res) => {
+    try {
+        correo=req.query.email
         const Drive = await drive.findOne({email:correo});
-
-    const imageName = Drive.picLicencia; 
-    console.log(imageName);
-    const imagePath = path.join(__dirname, "../../upload/drivers/licencia", imageName);
-    console.log(imagePath);
-
-    res.sendFile(imagePath);
-
-
+        const imageName = Drive.picLicencia; 
+        const imagePath = path.join(__dirname, "../../upload/drivers/licencia", imageName);
+        res.sendFile(imagePath);
+    } catch (error) {
+        console.log(error)
+        return res.status(401).json({estado:'Error'})
+    }
 });
 
+async function verifyToken(req, res, next) {
+    try {
+        if (!req.headers.authorization) {
+            return res.status(401).send('Unauhtorized Request');
+        }
+        let token = req.headers.authorization.split(' ')[1];
+        if (token === 'null') {
+            return res.status(401).send('Unauhtorized Request');
+        }
 
-
-
-
+        const payload = await jwt.verify(token, 'secretkey');
+        if (!payload) {
+            return res.status(401).send('Unauhtorized Request');
+        }
+        req.userId = payload._id;
+        next();
+    } catch(e) {
+        console.log(e)
+        return res.status(401).send('Unauhtorized Request');
+    }
+}
 module.exports = router;

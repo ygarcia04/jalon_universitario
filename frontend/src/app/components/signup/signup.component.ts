@@ -59,7 +59,6 @@ export class SignupComponent implements OnInit {
   }
   verify(){
     var pass= this.signup.value.password;
-    console.log(pass);
     if(pass.length<8){
       this.template='<div class="alert alert-warning" role="alert"><div>La contraseña debe tener al menos 8 caracteres.</div></div>';
       this.validate=false;
@@ -92,7 +91,6 @@ export class SignupComponent implements OnInit {
       return false;
     }
     this.user.vpassword = this.signup.value.vpassword;
-    console.log(this.user);
     if(this.user.nombres==""){
       alertify.error('No puede dejar el nombre en blanco');
     }else if(this.user.apellidos==""){

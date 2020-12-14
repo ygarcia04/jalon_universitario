@@ -7,6 +7,7 @@ import { AuthService } from "../../services/auth.service";
 import { Router } from "@angular/router";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import * as alertify from 'alertifyjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'abe-rutas',
@@ -18,7 +19,7 @@ export class RutasComponent implements OnInit {
     tipoDestino:'',
     hora: '',
     ruta:'', 
-    asientos:''
+    asientos:0
    
   };
   template='';
@@ -38,11 +39,26 @@ export class RutasComponent implements OnInit {
     }else if (this.authService.loggedIn()){
       this.router.navigate(['/profile']);
     }
+    this.authService.userState()
+    .subscribe(
+      res => {
+        if(res.estado=='verificarCorreo'){
+          this.router.navigate(['/verification']);
+          Swal.fire("Error", "Debe verificar su usuario para usar Jalón Universitario", "warning");
+        }       
+      },
+      err => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 401) {
+            this.router.navigate(['/signin']);
+          }
+        }
+      }
+    )
   }
 
   Ruta(){
     let rutas =this.user.ruta.split(',');
-    console.log(rutas.length)
     if(this.validate==false){
       alertify.error('Verifique todos los campos ingresados');
       return false;
@@ -56,6 +72,12 @@ export class RutasComponent implements OnInit {
       return false
     }else if(!this.user.hora.match(/(\d{2})\:(\d{2})/)){
       alertify.error('Favor use el formato de 24 horas HH:mm');
+      return false
+    }else if(!this.user.asientos.toString().match(/(\d{2})/)){
+      alertify.error('Favor ingrese un número entero');
+      return false
+    }else if(this.user.asientos<0 || this.user.asientos>20){
+      alertify.error('Número de asientos demasiado grande');
       return false
     }else {
       Swal.fire({​​

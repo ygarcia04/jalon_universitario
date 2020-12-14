@@ -85,14 +85,13 @@ this.authService.viewDriversroute()
     //Guardando el numero de elementos de la consulta hecha
     this.docs=res.count;
     //this.docs = res.Routed;
-    console.log(this.docs);
     //Guardando todos los elementos de la consulta hecha en users
     this.users=res.drivers;
     
     //Llamado a la funcion que llena los elementos a mostrar en la tabla
     this.fillItems(this.docs);
   },
-  err=>{console.log(err)}
+  err=>{console.log('Error')}
 );
 }  
   
@@ -118,7 +117,6 @@ for (let i = 0; i < limit; i++) {
       TipoDestino: this.users[i].tipoDestino,
       Asientos: this.users[i].asientos
     });
-    console.log (this.users[i].email);
     numero++;
    }
       
@@ -171,7 +169,6 @@ async pedirJalon(email, Nombre, Apellido, Facultad, TipoVehiculo, Ruta, HoraSali
     this.user.Ruta = Ruta;
     this.user.TipoDestino = TipoDestino;
     this.user.Asientos= Asientos;
-    console.log(this.user)
 this.authService.pedirJalonDriver(this.user)
   .subscribe(
     res=>{

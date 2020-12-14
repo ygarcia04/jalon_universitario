@@ -32,12 +32,10 @@ export class VerificationComponent implements OnInit {
         res =>{ 
           if(res.estado=='Fallo'){
             Swal.fire("Error", "El codigo no coincide con el enviado a su correo", "warning");
-            console.log(res.token);
             this.router.navigate(['/verification']);
           }else if(res.estado=='Sistema'){
             Swal.fire("Error", "Hubo un fallo en el sistema, por favor intente de nuevo", "warning");
             this.router.navigate(['/verification']);
-            console.log(res.token);
           }else if(res.estado=='Hecho' && res.type=='driver'){
             Swal.fire("Cuenta Verificada", "Gracias por registrarse con nosotros, se le informará a su correo cuando su cuenta sea activada", "success");
             this.authService.logoutDriver();

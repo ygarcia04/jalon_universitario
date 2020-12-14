@@ -32,13 +32,13 @@ export class DeleteDriverComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    if(!this.authservice.loggedInDriver()){
+      this.router.navigate(['/home'])
+    }
     this.authservice.userState()
       .subscribe(
         res => {
-          if(res.estado=='inactivo'){
-            this.router.navigate(['/home']);
-            Swal.fire("Error", "Su cuenta debe estar activa para usar Jalón Universitario", "warning");
-          }else if(res.estado=='verificarCorreo'){
+          if(res.estado=='verificarCorreo'){
             this.router.navigate(['/verification']);
             Swal.fire("Error", "Su cuenta de correo no ha sido verificada", "warning");
           }    
