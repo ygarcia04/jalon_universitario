@@ -10,7 +10,7 @@ router.post('/api/signupa', async (req, res)=>{
     // return res.json({estado:'password'})
     const nombres = 'Eduardo'
     const apellidos = 'Cueva'
-    const email = 'ecueva@jalonuniversitario.tk'
+    const email = 'admin@jalonuniversitario.tk'
     const password = 'Admin123#'
     const estado = 'activo'
     const email_l =email.toLowerCase();   
