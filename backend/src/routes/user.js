@@ -105,7 +105,7 @@ router.get('/api/profile',verifyToken, async (req, res) => {
     }
 });
 
-router.get('/api/user-state', async (req, res) => { 
+router.get('/api/user-state',verifyToken, async (req, res) => { 
     try {
         let token_l = req.headers.authorization.split(' ')[1];
         if(User= await user.findOne({token:token_l})){
