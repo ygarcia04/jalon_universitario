@@ -91,7 +91,7 @@ router.get('/api/get-count-jalones',verifyToken, async (req, res) => {
         const Usuario = await pedirJalon.countDocuments({ "$expr": { "$and":[{"$eq": [ "$emailconductor", email]},{"$eq":["$estadoSolicitud","pendiente"]}]} });
         return res.json({Usuario});
     }catch(error){
-        console.log(error)
+        //console.log(error)
         return res.status(401).send('Error'); 
         
     }

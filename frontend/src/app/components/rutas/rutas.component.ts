@@ -73,9 +73,6 @@ export class RutasComponent implements OnInit {
     }else if(!this.user.hora.match(/(\d{2})\:(\d{2})/)){
       alertify.error('Favor use el formato de 24 horas HH:mm');
       return false
-    }else if(!this.user.asientos.toString().match(/(\d{2})/)){
-      alertify.error('Favor ingrese un número entero');
-      return false
     }else if(this.user.asientos<0 || this.user.asientos>20){
       alertify.error('Número de asientos demasiado grande');
       return false
