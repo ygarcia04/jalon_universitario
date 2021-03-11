@@ -15,16 +15,6 @@ numero:Number;
   constructor(public authService: AuthService){
     let date = new Date();
     this.anio=date.getFullYear();
-      const source = interval(2500);
-    //output: 0,1,2,3,4,5....
-    const subscribe = source.subscribe(val => {
-      if(this.authService.loggedInDriver()){
-        this.authService.getCountJalones().subscribe(
-          res=>{this.numero=res.Usuario;},
-          err=>{}
-          )
-        }  
-      })
 
   }
   title = 'frontend';
